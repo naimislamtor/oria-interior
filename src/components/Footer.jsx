@@ -123,7 +123,7 @@ function Footer() {
       </div>
 
       <div className="border-t mt-8 pt-4 text-center text-xs opacity-50" style={{ borderColor: 'var(--border-color)' }}>
-        © {new Date().getFullYear()} Orio Interior. All rights reserved. Developement by Hamza's Team.
+        © {new Date().getFullYear()} Orio Interior. All rights reserved. Developement by Naim's Team.
       </div>
     </footer>
   )
