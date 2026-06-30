@@ -1,1 +1,75 @@
 @import "tailwindcss";
+/* Soft Premium Card - matches reference screenshot style */
+.premium-card {
+  position: relative;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  box-shadow: 0 4px 20px -8px rgba(0,0,0,0.08);
+}
+
+.premium-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--accent);
+  border-radius: 0 4px 4px 0;
+  transition: width 0.35s ease;
+}
+
+.premium-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px -12px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.premium-card:hover::before {
+  width: 8px;
+}
+
+/* Soft colored glow on hover (subtle, not rotating) */
+.premium-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 10%, transparent), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.premium-card:hover::after {
+  opacity: 1;
+}
+
+/* Animated Button */
+.btn-animated {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-animated:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 30px -8px var(--accent);
+}
+
+.btn-animated:active {
+  transform: translateY(-1px) scale(1.01);
+}
+
+/* Icon slide on hover */
+.icon-slide {
+  transition: transform 0.3s ease;
+}
+
+.btn-animated:hover .icon-slide {
+  transform: translateX(5px);
+}
+
+/* Parallax hero background */
+.parallax-bg {
+  will-change: transform;
+}
