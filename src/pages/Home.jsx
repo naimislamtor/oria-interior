@@ -5,6 +5,7 @@ import {
   ArrowRight, Sofa, Building2, Briefcase, Utensils, PenTool, Box,
   Star, Quote, MessageCircle, CheckCircle2, Search, PencilRuler, Hammer, Sparkles
 } from 'lucide-react'
+import HeroSlider from '../components/HeroSlider'
 
 const services = [
   { icon: Sofa, title: 'Residential Interior', desc: 'Transform your home into a stylish, comfortable living space.' },
@@ -55,9 +56,7 @@ function Counter({ end, suffix }) {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started) setStarted(true)
-      },
+      ([entry]) => { if (entry.isIntersecting && !started) setStarted(true) },
       { threshold: 0.5 }
     )
     if (ref.current) observer.observe(ref.current)
@@ -71,12 +70,8 @@ function Counter({ end, suffix }) {
     const increment = end / (duration / 16)
     const timer = setInterval(() => {
       start += increment
-      if (start >= end) {
-        setCount(end)
-        clearInterval(timer)
-      } else {
-        setCount(Math.floor(start))
-      }
+      if (start >= end) { setCount(end); clearInterval(timer) }
+      else setCount(Math.floor(start))
     }, 16)
     return () => clearInterval(timer)
   }, [started, end])
@@ -91,54 +86,9 @@ function Counter({ end, suffix }) {
 function Home() {
   return (
     <div style={{ backgroundColor: 'var(--bg-section)' }}>
-      {/* Hero Section */}
-      <section className="relative overflow-hidden" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-on-dark)' }}>
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1600"
-            alt="Modern Interior"
-            className="w-full h-full object-cover opacity-30"
-          />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, var(--bg-primary) 20%, transparent 90%)', opacity: 0.85 }} />
-        </div>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="relative max-w-7xl mx-auto px-4 py-32 md:py-44"
-        >
-          <span
-            className="inline-flex items-center gap-2 backdrop-blur px-4 py-1.5 rounded-full text-xs font-medium mb-6 border"
-            style={{ backgroundColor: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.15)' }}
-          >
-            <Star size={14} style={{ color: 'var(--accent)', fill: 'var(--accent)' }} />
-            Trusted by 180+ Happy Clients
-          </span>
-          <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6 max-w-3xl">
-            We Design Your <span style={{ color: 'var(--accent)' }}>Dream Space</span>
-          </h1>
-          <p className="opacity-80 max-w-xl mb-8 text-lg">
-            From residential homes to commercial spaces, we create interiors that inspire,
-            function beautifully, and reflect who you are.
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <Link
-              to="/quote"
-              className="px-7 py-3 rounded font-semibold transition flex items-center gap-2 shadow-lg"
-              style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
-            >
-              Get Free Quote <ArrowRight size={18} />
-            </Link>
-            <Link
-              to="/portfolio"
-              className="border px-7 py-3 rounded font-semibold transition hover:opacity-80"
-              style={{ borderColor: 'rgba(255,255,255,0.3)' }}
-            >
-              View Portfolio
-            </Link>
-          </div>
-        </motion.div>
-      </section>
+
+      {/* Hero Slider */}
+      <HeroSlider />
 
       {/* Stats Bar */}
       <section style={{ backgroundColor: 'var(--accent)' }}>
@@ -154,22 +104,9 @@ function Home() {
 
       {/* About Section */}
       <section className="max-w-7xl mx-auto px-4 py-20 grid md:grid-cols-2 gap-12 items-center">
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="relative"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=800"
-            alt="About Orio Interior"
-            className="rounded-lg shadow-xl w-full h-[420px] object-cover"
-          />
-          <div
-            className="absolute -bottom-6 -right-6 p-5 rounded-lg shadow-xl hidden md:flex items-center gap-3 border"
-            style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-color)' }}
-          >
+        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="relative">
+          <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=800" alt="About" className="rounded-lg shadow-xl w-full h-[420px] object-cover" />
+          <div className="absolute -bottom-6 -right-6 bg-white p-5 rounded-lg shadow-xl hidden md:flex items-center gap-3 border" style={{ borderColor: 'var(--border-color)' }}>
             <div className="p-3 rounded-full" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 15%, transparent)' }}>
               <CheckCircle2 style={{ color: 'var(--accent)' }} size={26} />
             </div>
@@ -179,25 +116,10 @@ function Home() {
             </div>
           </div>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+        <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>About Us</p>
-          <h2 className="text-3xl md:text-4xl font-bold mb-5" style={{ color: 'var(--text-primary)' }}>
-            Crafting Spaces That Tell Your Story
-          </h2>
-          <p className="mb-4 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            At Orio Interior, we believe every space has the potential to inspire. With over a
-            decade of experience, our team blends creativity with functionality to design
-            interiors that truly reflect your personality and needs.
-          </p>
-          <p className="mb-6 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            From concept to completion, we handle every detail — ensuring a seamless journey
-            toward your dream space.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-5" style={{ color: 'var(--text-primary)' }}>Crafting Spaces That Tell Your Story</h2>
+          <p className="mb-4 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>At Orio Interior, we believe every space has the potential to inspire. With over a decade of experience, our team blends creativity with functionality to design interiors that truly reflect your personality and needs.</p>
           <div className="grid grid-cols-2 gap-4 mb-6">
             {['Free Consultation', 'Expert Designers', 'On-Time Delivery', 'Quality Materials'].map((item) => (
               <div key={item} className="flex items-center gap-2">
@@ -206,17 +128,13 @@ function Home() {
               </div>
             ))}
           </div>
-          <Link
-            to="/about"
-            className="inline-flex items-center gap-2 font-semibold hover:gap-3 transition-all"
-            style={{ color: 'var(--accent)' }}
-          >
+          <Link to="/about" className="inline-flex items-center gap-2 font-semibold hover:gap-3 transition-all" style={{ color: 'var(--accent)' }}>
             Learn More About Us <ArrowRight size={18} />
           </Link>
         </motion.div>
       </section>
 
-      {/* Services Section */}
+      {/* Services */}
       <section className="py-20" style={{ backgroundColor: 'var(--bg-card)' }}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-14">
@@ -227,19 +145,9 @@ function Home() {
             {services.map((service, idx) => {
               const Icon = service.icon
               return (
-                <motion.div
-                  key={service.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.1 }}
-                  className="p-7 rounded-lg shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all border group"
-                  style={{ backgroundColor: 'var(--bg-section)', borderColor: 'var(--border-color)' }}
-                >
-                  <div
-                    className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 transition-colors"
-                    style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 12%, transparent)' }}
-                  >
+                <motion.div key={service.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: idx * 0.1 }}
+                  className="premium-card p-7 group" style={{ backgroundColor: 'var(--bg-section)', border: '1px solid var(--border-color)' }}>
+                  <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4" style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 12%, transparent)' }}>
                     <Icon style={{ color: 'var(--accent)' }} size={24} />
                   </div>
                   <h3 className="text-lg font-bold mb-2" style={{ color: 'var(--text-primary)' }}>{service.title}</h3>
@@ -251,7 +159,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Process Section */}
+      {/* Process */}
       <section className="max-w-7xl mx-auto px-4 py-20">
         <div className="text-center mb-14">
           <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>Our Process</p>
@@ -262,18 +170,8 @@ function Home() {
           {process.map((p, idx) => {
             const Icon = p.icon
             return (
-              <motion.div
-                key={p.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.15 }}
-                className="relative text-center"
-              >
-                <div
-                  className="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-5 relative z-10"
-                  style={{ backgroundColor: 'var(--bg-primary)' }}
-                >
+              <motion.div key={p.step} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: idx * 0.15 }} className="relative text-center">
+                <div className="w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-5 relative z-10" style={{ backgroundColor: 'var(--bg-primary)' }}>
                   <Icon style={{ color: 'var(--accent)' }} size={28} />
                 </div>
                 <span className="font-bold text-sm" style={{ color: 'var(--accent)' }}>{p.step}</span>
@@ -291,48 +189,26 @@ function Home() {
           <div className="text-center mb-14">
             <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>Transformations</p>
             <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-on-dark)' }}>Before & After</h2>
-            <p className="mt-3 max-w-xl mx-auto opacity-70" style={{ color: 'var(--text-on-dark)' }}>
-              See the dramatic difference our design expertise makes.
-            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="relative rounded-lg overflow-hidden group">
-              <img
-                src="https://images.unsplash.com/photo-1484101403633-562f891dc89a?q=80&w=800"
-                alt="Before"
-                className="w-full h-72 object-cover"
-              />
-              <span className="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                BEFORE
-              </span>
+            <div className="relative rounded-lg overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1484101403633-562f891dc89a?q=80&w=800" alt="Before" className="w-full h-72 object-cover" />
+              <span className="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">BEFORE</span>
             </div>
-            <div className="relative rounded-lg overflow-hidden group">
-              <img
-                src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800"
-                alt="After"
-                className="w-full h-72 object-cover"
-              />
-              <span
-                className="absolute top-4 left-4 text-xs font-bold px-3 py-1 rounded-full"
-                style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
-              >
-                AFTER
-              </span>
+            <div className="relative rounded-lg overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800" alt="After" className="w-full h-72 object-cover" />
+              <span className="absolute top-4 left-4 text-xs font-bold px-3 py-1 rounded-full" style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>AFTER</span>
             </div>
           </div>
           <div className="text-center mt-10">
-            <Link
-              to="/gallery"
-              className="inline-flex items-center gap-2 border px-7 py-3 rounded font-semibold transition hover:opacity-80"
-              style={{ borderColor: 'rgba(255,255,255,0.3)', color: 'var(--text-on-dark)' }}
-            >
-              View More Transformations <ArrowRight size={18} />
+            <Link to="/gallery" className="inline-flex items-center gap-2 border px-7 py-3 rounded font-semibold transition hover:opacity-80" style={{ borderColor: 'rgba(255,255,255,0.3)', color: 'var(--text-on-dark)' }}>
+              View More <ArrowRight size={18} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Portfolio Preview */}
+      {/* Portfolio */}
       <section className="max-w-7xl mx-auto px-4 py-20">
         <div className="text-center mb-14">
           <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>Our Work</p>
@@ -340,19 +216,9 @@ function Home() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {projects.map((project, idx) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
-              className="group relative overflow-hidden rounded-lg cursor-pointer"
-            >
-              <img
-                src={project.img}
-                alt={project.title}
-                className="w-full h-72 object-cover group-hover:scale-110 transition duration-500"
-              />
+            <motion.div key={project.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: idx * 0.1 }}
+              className="group relative overflow-hidden rounded-lg cursor-pointer">
+              <img src={project.img} alt={project.title} className="w-full h-72 object-cover group-hover:scale-110 transition duration-500" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-5">
                 <p className="text-xs font-semibold uppercase mb-1" style={{ color: 'var(--accent)' }}>{project.category}</p>
                 <h3 className="text-white font-bold">{project.title}</h3>
@@ -361,11 +227,7 @@ function Home() {
           ))}
         </div>
         <div className="text-center mt-10">
-          <Link
-            to="/portfolio"
-            className="inline-flex items-center gap-2 px-7 py-3 rounded font-semibold transition"
-            style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-on-dark)' }}
-          >
+          <Link to="/portfolio" className="inline-flex items-center gap-2 px-7 py-3 rounded font-semibold transition" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-on-dark)' }}>
             View All Projects <ArrowRight size={18} />
           </Link>
         </div>
@@ -380,21 +242,12 @@ function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((t, idx) => (
-              <motion.div
-                key={t.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.1 }}
-                className="p-7 rounded-lg shadow-sm border"
-                style={{ backgroundColor: 'var(--bg-section)', borderColor: 'var(--border-color)' }}
-              >
+              <motion.div key={t.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: idx * 0.1 }}
+                className="premium-card p-7" style={{ backgroundColor: 'var(--bg-section)', border: '1px solid var(--border-color)' }}>
                 <Quote style={{ color: 'var(--accent)' }} className="mb-4" size={28} />
                 <p className="text-sm leading-relaxed mb-5" style={{ color: 'var(--text-secondary)' }}>{t.text}</p>
                 <div className="flex items-center gap-1 mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={14} style={{ color: 'var(--accent)', fill: 'var(--accent)' }} />
-                  ))}
+                  {[...Array(5)].map((_, i) => <Star key={i} size={14} style={{ color: 'var(--accent)', fill: 'var(--accent)' }} />)}
                 </div>
                 <p className="font-semibold" style={{ color: 'var(--text-primary)' }}>{t.name}</p>
                 <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t.role}</p>
@@ -404,7 +257,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Blog Preview */}
+      {/* Blog */}
       <section className="max-w-7xl mx-auto px-4 py-20">
         <div className="text-center mb-14">
           <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>Our Blog</p>
@@ -412,75 +265,41 @@ function Home() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {blogs.map((blog, idx) => (
-            <motion.div
-              key={blog.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
-              className="group cursor-pointer"
-            >
+            <motion.div key={blog.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: idx * 0.1 }} className="group cursor-pointer">
               <div className="overflow-hidden rounded-lg mb-4">
-                <img
-                  src={blog.img}
-                  alt={blog.title}
-                  className="w-full h-56 object-cover group-hover:scale-110 transition duration-500"
-                />
+                <img src={blog.img} alt={blog.title} className="w-full h-56 object-cover group-hover:scale-110 transition duration-500" />
               </div>
               <p className="text-xs font-semibold mb-2" style={{ color: 'var(--accent)' }}>{blog.date}</p>
-              <h3 className="text-lg font-bold transition" style={{ color: 'var(--text-primary)' }}>
-                {blog.title}
-              </h3>
+              <h3 className="text-lg font-bold transition" style={{ color: 'var(--text-primary)' }}>{blog.title}</h3>
             </motion.div>
           ))}
         </div>
         <div className="text-center mt-10">
-          <Link
-            to="/blog"
-            className="inline-flex items-center gap-2 font-semibold hover:gap-3 transition-all"
-            style={{ color: 'var(--accent)' }}
-          >
+          <Link to="/blog" className="inline-flex items-center gap-2 font-semibold hover:gap-3 transition-all" style={{ color: 'var(--accent)' }}>
             Read All Articles <ArrowRight size={18} />
           </Link>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA */}
       <section className="py-16" style={{ backgroundColor: 'var(--accent)' }}>
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: 'var(--bg-primary)' }}>
-            Ready to Transform Your Space?
-          </h2>
-          <p className="mb-8 max-w-xl mx-auto opacity-80" style={{ color: 'var(--bg-primary)' }}>
-            Get a free consultation with our design experts and take the first step toward
-            your dream interior.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: 'var(--bg-primary)' }}>Ready to Transform Your Space?</h2>
+          <p className="mb-8 max-w-xl mx-auto opacity-80" style={{ color: 'var(--bg-primary)' }}>Get a free consultation with our design experts.</p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              to="/consultation"
-              className="px-7 py-3 rounded font-semibold transition"
-              style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-on-dark)' }}
-            >
+            <Link to="/consultation" className="btn-animated px-7 py-3 rounded font-semibold transition" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-on-dark)' }}>
               Book Free Consultation
             </Link>
-            <Link
-              to="/contact"
-              className="border px-7 py-3 rounded font-semibold transition hover:opacity-80"
-              style={{ borderColor: 'var(--bg-primary)', color: 'var(--bg-primary)' }}
-            >
+            <Link to="/contact" className="border px-7 py-3 rounded font-semibold transition hover:opacity-80" style={{ borderColor: 'var(--bg-primary)', color: 'var(--bg-primary)' }}>
               Contact Us
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Floating WhatsApp Button */}
-      <a
-        href="https://wa.me/8801983890650"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg z-50 transition hover:scale-110"
-      >
+      {/* WhatsApp */}
+      <a href="https://wa.me/8801983890650" target="_blank" rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg z-50 transition hover:scale-110">
         <MessageCircle size={26} fill="white" />
       </a>
     </div>
