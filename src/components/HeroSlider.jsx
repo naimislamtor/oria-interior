@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight, ChevronRight, Star } from 'lucide-react'
 
@@ -11,7 +11,112 @@ const typewriterWords = [
   'Functional Beauty',
 ]
 
-function Typewriter({ words, typingSpeed = 90, deletingSpeed = 50, pauseTime = 1500 }) {
+// TODO: এখানে আপনার নিজের mobile image path গুলো বসান
+const mobileHeroImages = [
+  '/images/hero-mobile-1.jpeg',
+  '/images/hero-mobile-2.jpeg',
+  '/images/hero-mobile-3.jpeg',
+  '/images/hero-mobile-4.jpeg',
+  '/images/hero-mobile-5.jpeg',
+  '/images/hero-mobile-6.jpeg',
+  '/images/hero-mobile-7.jpeg',
+]
+
+// Screen size detect করার জন্য hook (768px এর নিচে হলে mobile ধরা হবে)
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== 'undefined' ? window.innerWidth < breakpoint : false
+  )
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < breakpoint)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [breakpoint])
+
+  return isMobile
+}
+
+// Mobile-এর জন্য image slideshow
+// - Auto-play: কয়েক সেকেন্ড পর পর নিজে নিজে বদলায়
+// - Swipe/Drag: হাত দিয়ে টেনেও (বাম/ডান) বদলানো যায়
+// - নিচে dot indicator থাকে, কয়টা image আছে ও এখন কোনটায় আছি বোঝার জন্য
+function MobileImageSlideshow({ images, interval = 3500 }) {
+  const [current, setCurrent] = useState(0)
+  const [direction, setDirection] = useState(1)
+
+  const goNext = () => {
+    setDirection(1)
+    setCurrent((prev) => (prev + 1) % images.length)
+  }
+
+  const goPrev = () => {
+    setDirection(-1)
+    setCurrent((prev) => (prev - 1 + images.length) % images.length)
+  }
+
+  const goTo = (index) => {
+    setDirection(index > current ? 1 : -1)
+    setCurrent(index)
+  }
+
+  // Auto-play timer — user drag করলে বা dot চাপলে reset হয়ে আবার শুরু হয়
+  useEffect(() => {
+    const timer = setInterval(goNext, interval)
+    return () => clearInterval(timer)
+  }, [current, images.length, interval])
+
+  const variants = {
+    enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0.5 }),
+    center: { x: 0, opacity: 1 },
+    exit: (dir) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0.5 }),
+  }
+
+  return (
+    <div className="absolute inset-0 bg-black overflow-hidden">
+      <AnimatePresence custom={direction} initial={false}>
+        <motion.img
+          key={current}
+          src={images[current]}
+          alt="Orio Interior"
+          className="w-full h-full object-cover absolute inset-0"
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.4, ease: 'easeInOut' }}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.6}
+          onDragEnd={(e, info) => {
+            const swipeThreshold = 60
+            if (info.offset.x < -swipeThreshold) goNext()
+            else if (info.offset.x > swipeThreshold) goPrev()
+          }}
+        />
+      </AnimatePresence>
+
+      {/* Dot Indicators */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+        {images.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => goTo(idx)}
+            className="transition-all duration-300 rounded-full"
+            style={{
+              width: current === idx ? '22px' : '7px',
+              height: '7px',
+              backgroundColor: current === idx ? 'var(--accent)' : 'rgba(255,255,255,0.5)',
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function Typewriter({ words, typingSpeed = 90, deletingSpeed = 50, pauseTime = 1500, isMobile = false }) {
   const [wordIndex, setWordIndex] = useState(0)
   const [text, setText] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
@@ -40,7 +145,9 @@ function Typewriter({ words, typingSpeed = 90, deletingSpeed = 50, pauseTime = 1
     <span
       style={{
         color: 'var(--accent)',
-        textShadow: '0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 40px var(--accent)',
+        textShadow: isMobile
+          ? 'none'
+          : '0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 40px var(--accent)',
       }}
     >
       {text}
@@ -50,18 +157,24 @@ function Typewriter({ words, typingSpeed = 90, deletingSpeed = 50, pauseTime = 1
 }
 
 function HeroSlider() {
+  const isMobile = useIsMobile()
+
   return (
     <section className="relative overflow-hidden" style={{ height: '100vh', minHeight: '600px', maxHeight: '900px' }}>
-      {/* Background Video */}
+      {/* Background: Video (desktop) or Image Slideshow (mobile) */}
       <div className="absolute inset-0">
-        <video
-          src="/videos/banner-video.mp4"
-          className="w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
+        {isMobile ? (
+          <MobileImageSlideshow images={mobileHeroImages} />
+        ) : (
+          <video
+            src="/videos/banner-video.mp4"
+            className="w-full h-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+        )}
         {/* Overlay */}
         <div
           className="absolute inset-0"
@@ -95,7 +208,7 @@ function HeroSlider() {
 
             {/* Typewriter line */}
             <p className="text-2xl md:text-4xl font-bold mb-5 min-h-[2.5rem]">
-              <Typewriter words={typewriterWords} />
+              <Typewriter words={typewriterWords} isMobile={isMobile} />
             </p>
 
             {/* Subtitle */}
