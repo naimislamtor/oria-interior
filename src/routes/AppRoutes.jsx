@@ -14,6 +14,13 @@ import Appointment from '../pages/Appointment'
 import QuoteRequest from '../pages/QuoteRequest'
 import Consultation from '../pages/Consultation'
 
+import AdminLogin from '../pages/admin/AdminLogin'
+import AdminDashboard from '../pages/admin/AdminDashboard'
+import AdminInquiries from '../pages/admin/AdminInquiries'
+import AdminPortfolio from '../pages/admin/AdminPortfolio'
+import AdminLayout from '../components/admin/AdminLayout'
+import ProtectedRoute from '../components/admin/ProtectedRoute'
+
 function AppRoutes() {
   return (
     <Routes>
@@ -31,6 +38,21 @@ function AppRoutes() {
         <Route path="appointment" element={<Appointment />} />
         <Route path="quote" element={<QuoteRequest />} />
         <Route path="consultation" element={<Consultation />} />
+      </Route>
+
+      <Route path="/admin/login" element={<AdminLogin />} />
+
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="inquiries" element={<AdminInquiries />} />
+        <Route path="portfolio" element={<AdminPortfolio />} />
       </Route>
     </Routes>
   )
