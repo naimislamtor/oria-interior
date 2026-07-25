@@ -298,7 +298,7 @@ function Home() {
       </section>
 
       {/* WhatsApp */}
-      <a href="https://wa.me/8801983890650" target="_blank" rel="noopener noreferrer"
+      <a href="https://wa.me/8801334003388" target="_blank" rel="noopener noreferrer"
         className="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg z-50 transition hover:scale-110">
         <MessageCircle size={26} fill="white" />
       </a>
