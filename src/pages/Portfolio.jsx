@@ -1,11 +1,29 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, Calendar, ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { portfolioData, categories } from '../data/portfolioData'
+import axiosInstance, { BASE_URL } from '../api/axiosInstance'
+
+const categories = ['All', 'Residential', 'Commercial', 'Restaurant', 'Office']
 
 function Portfolio() {
   const [activeCategory, setActiveCategory] = useState('All')
+  const [portfolioData, setPortfolioData] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await axiosInstance.get('/api/portfolio')
+        setPortfolioData(res.data.data || [])
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchProjects()
+  }, [])
 
   const filtered = activeCategory === 'All'
     ? portfolioData
@@ -75,52 +93,58 @@ function Portfolio() {
 
       {/* Projects Grid */}
       <section className="max-w-7xl mx-auto px-4 py-16">
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <AnimatePresence>
-            {filtered.map((project) => (
-              <motion.div
-                key={project.id}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="premium-card group overflow-hidden"
-                style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
-              >
-                <div className="overflow-hidden h-60 relative">
-                  <img
-                    src={project.img}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-                  />
-                  <span
-                    className="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full"
-                    style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
-                  >
-                    {project.category}
-                  </span>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-                    {project.title}
-                  </h3>
-                  <p className="text-sm mb-4 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                    {project.description}
-                  </p>
-                  <div className="flex items-center justify-between text-xs" style={{ color: 'var(--text-muted)' }}>
-                    <span className="flex items-center gap-1">
-                      <MapPin size={12} /> {project.location}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Calendar size={12} /> {project.year}
+        {loading ? (
+          <p className="text-center" style={{ color: 'var(--text-secondary)' }}>Loading projects...</p>
+        ) : filtered.length === 0 ? (
+          <p className="text-center" style={{ color: 'var(--text-secondary)' }}>No projects found.</p>
+        ) : (
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <AnimatePresence>
+              {filtered.map((project) => (
+                <motion.div
+                  key={project._id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3 }}
+                  className="premium-card group overflow-hidden"
+                  style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
+                >
+                  <div className="overflow-hidden h-60 relative">
+                    <img
+                      src={`${BASE_URL}/uploads/${project.image}`}
+                      alt={project.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                    />
+                    <span
+                      className="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full"
+                      style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
+                    >
+                      {project.category}
                     </span>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
+                  <div className="p-6">
+                    <h3 className="text-lg font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
+                      {project.title}
+                    </h3>
+                    <p className="text-sm mb-4 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                      {project.description}
+                    </p>
+                    <div className="flex items-center justify-between text-xs" style={{ color: 'var(--text-muted)' }}>
+                      <span className="flex items-center gap-1">
+                        <MapPin size={12} /> {project.location}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Calendar size={12} /> {project.year}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        )}
       </section>
 
       {/* CTA */}

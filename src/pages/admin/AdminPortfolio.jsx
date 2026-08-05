@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Plus, Pencil, Trash2, X, Upload, Star, RefreshCw } from 'lucide-react'
-import axiosInstance from '../../api/axiosInstance'
+import axiosInstance, { BASE_URL } from '../../api/axiosInstance'
 import { useAdminAuth } from '../../context/AdminAuthContext'
 
 const categories = ['Residential', 'Commercial', 'Restaurant', 'Office']
@@ -54,7 +54,7 @@ function AdminPortfolio() {
       description: project.description || '',
       featured: project.featured,
     })
-    setImagePreview(`http://localhost:5000/uploads/${project.image}`)
+    setImagePreview(`${BASE_URL}/uploads/${project.image}`)
     setImageFile(null)
     setEditingId(project._id)
     setError('')
@@ -151,7 +151,7 @@ function AdminPortfolio() {
             <div key={project._id} className="bg-white rounded-xl border border-gray-200 overflow-hidden group">
               <div className="relative h-44 overflow-hidden">
                 <img
-                  src={`http://localhost:5000/uploads/${project.image}`}
+                  src={`${BASE_URL}/uploads/${project.image}`}
                   alt={project.title}
                   className="w-full h-full object-cover"
                 />
