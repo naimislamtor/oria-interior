@@ -7,7 +7,7 @@ import ServiceDetail from '../pages/ServiceDetail'
 import Maintenance from '../pages/Maintenance'
 import Portfolio from '../pages/Portfolio'
 import Gallery from '../pages/Gallery'
-import Blog from '../pages/Blog'
+import BlogDetail from '../pages/BlogDetail'
 import FAQ from '../pages/FAQ'
 import Contact from '../pages/Contact'
 import Appointment from '../pages/Appointment'
@@ -32,7 +32,7 @@ function AppRoutes() {
         <Route path="services/:slug" element={<ServiceDetail />} />
         <Route path="portfolio" element={<Portfolio />} />
         <Route path="gallery" element={<Gallery />} />
-        <Route path="blog" element={<Blog />} />
+        <Route path="blog/:id" element={<BlogDetail />} />
         <Route path="faq" element={<FAQ />} />
         <Route path="contact" element={<Contact />} />
         <Route path="appointment" element={<Appointment />} />

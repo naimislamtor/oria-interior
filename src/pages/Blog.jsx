@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { Calendar, Clock, ArrowRight, Tag } from 'lucide-react'
 import axiosInstance, { BASE_URL } from '../api/axiosInstance'
 
@@ -103,12 +104,13 @@ function Blog() {
                   />
                 </div>
                 <div className="p-8 flex flex-col justify-center">
-                  <span
-                    className="inline-flex items-center gap-1 text-xs font-semibold mb-4 px-3 py-1 rounded-full w-fit"
-                    style={{ backgroundColor: 'color-mix(in srgb, var(--accent) 12%, transparent)', color: 'var(--accent)' }}
-                  >
-                    <Tag size={12} /> {featured.category}
-                  </span>
+                  <Link
+                  to={`/blog/${featured._id}`}
+                    className="inline-flex items-center gap-2 text-sm font-semibold hover:gap-3 transition-all"
+                    style={{ color: 'var(--accent)' }}
+                      >
+                    Read Article <ArrowRight size={16} className="icon-slide" />
+                    </Link>
                   <h2 className="text-2xl font-bold mb-3" style={{ color: 'var(--text-primary)' }}>
                     {featured.title}
                   </h2>
@@ -156,16 +158,20 @@ function Blog() {
               <p className="text-center" style={{ color: 'var(--text-secondary)' }}>Loading posts...</p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
                 {rest.map((blog, idx) => (
-                  <motion.div
-                    key={blog._id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: idx * 0.1 }}
-                    className="premium-card group cursor-pointer overflow-hidden"
-                    style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
-                  >
+  <motion.div
+    key={blog._id}
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.4, delay: idx * 0.1 }}
+  >
+  <Link
+    to={`/blog/${blog._id}`}
+    className="premium-card group cursor-pointer overflow-hidden block"
+    style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
+  ></Link>
                     <div className="overflow-hidden h-52">
                       <img
                         src={`${BASE_URL}/uploads/${blog.image}`}
@@ -191,8 +197,9 @@ function Blog() {
                         {blog.readTime && <span className="flex items-center gap-1"><Clock size={12} /> {blog.readTime}</span>}
                       </div>
                     </div>
-                  </motion.div>
-                ))}
+                </Link>
+                </motion.div>
+              ))}
               </div>
             )}
           </section>
