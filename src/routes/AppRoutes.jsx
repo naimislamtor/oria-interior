@@ -7,6 +7,7 @@ import ServiceDetail from '../pages/ServiceDetail'
 import Maintenance from '../pages/Maintenance'
 import Portfolio from '../pages/Portfolio'
 import Gallery from '../pages/Gallery'
+import Blog from '../pages/Blog'
 import BlogDetail from '../pages/BlogDetail'
 import FAQ from '../pages/FAQ'
 import Contact from '../pages/Contact'
@@ -17,6 +18,7 @@ import Consultation from '../pages/Consultation'
 import AdminLogin from '../pages/admin/AdminLogin'
 import AdminDashboard from '../pages/admin/AdminDashboard'
 import AdminInquiries from '../pages/admin/AdminInquiries'
+import AdminPortfolio from '../pages/admin/AdminPortfolio'
 import AdminBlog from '../pages/admin/AdminBlog'
 import AdminLayout from '../components/admin/AdminLayout'
 import ProtectedRoute from '../components/admin/ProtectedRoute'
@@ -32,6 +34,7 @@ function AppRoutes() {
         <Route path="services/:slug" element={<ServiceDetail />} />
         <Route path="portfolio" element={<Portfolio />} />
         <Route path="gallery" element={<Gallery />} />
+        <Route path="blog" element={<Blog />} />
         <Route path="blog/:id" element={<BlogDetail />} />
         <Route path="faq" element={<FAQ />} />
         <Route path="contact" element={<Contact />} />
@@ -52,6 +55,7 @@ function AppRoutes() {
       >
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="inquiries" element={<AdminInquiries />} />
+        <Route path="portfolio" element={<AdminPortfolio />} />
         <Route path="blog" element={<AdminBlog />} />
       </Route>
     </Routes>
