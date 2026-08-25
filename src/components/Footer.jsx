@@ -49,7 +49,7 @@ function Footer() {
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
           <h2 className="text-2xl font-bold mb-3" style={{ color: 'var(--accent)' }}>
-            ORIO <span style={{ color: 'var(--text-on-dark)', fontWeight: 300 }}>INTERIOR</span>
+            ORIA <span style={{ color: 'var(--text-on-dark)', fontWeight: 300 }}>INTERIOR</span>
           </h2>
           <p className="text-sm opacity-70 leading-relaxed">
             We design beautiful, functional spaces that inspire and elevate everyday living.
@@ -105,7 +105,7 @@ function Footer() {
             </li>
             <li className="flex items-center gap-2">
               <Mail size={15} style={{ color: 'var(--accent)' }} />
-              <span className="opacity-80">info@oriointeriorbd.com</span>
+              <span className="opacity-80">info@oriainteriorbd.com</span>
             </li>
             <li className="flex items-start gap-2">
               <MapPin size={15} className="mt-1" style={{ color: 'var(--accent)' }} />
@@ -124,7 +124,7 @@ function Footer() {
       </div>
 
       <div className="border-t mt-8 pt-4 text-center text-xs opacity-50" style={{ borderColor: 'var(--border-color)' }}>
-        © {new Date().getFullYear()} Orio Interior. All rights reserved. Developement by Naim's Team.
+        © {new Date().getFullYear()} Oria Interior. All rights reserved. Developement by Naim's Team.
       </div>
     </footer>
   )

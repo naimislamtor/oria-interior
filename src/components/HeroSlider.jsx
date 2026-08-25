@@ -78,7 +78,7 @@ function MobileImageSlideshow({ images, interval = 3500 }) {
         <motion.img
           key={current}
           src={images[current]}
-          alt="Orio Interior"
+          alt="Oria Interior"
           className="w-full h-full object-cover absolute inset-0"
           custom={direction}
           variants={variants}

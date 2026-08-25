@@ -42,7 +42,7 @@ function AdminLayout() {
         {/* Logo */}
         <div className="px-6 py-6 border-b" style={{ borderColor: '#2a2a2a' }}>
           <h1 className="text-xl font-bold" style={{ color: '#c9a84c' }}>
-            ORIO <span className="text-white font-light">ADMIN</span>
+            ORIA <span className="text-white font-light">ADMIN</span>
           </h1>
         </div>
 
@@ -114,7 +114,7 @@ function AdminLayout() {
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile Header */}
         <header className="md:hidden flex items-center justify-between px-4 py-4 bg-white border-b sticky top-0 z-30">
-          <h1 className="font-bold text-lg" style={{ color: '#c9a84c' }}>ORIO ADMIN</h1>
+          <h1 className="font-bold text-lg" style={{ color: '#c9a84c' }}>ORIA ADMIN</h1>
           <button onClick={() => setSidebarOpen(!sidebarOpen)}>
             {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

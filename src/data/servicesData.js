@@ -15,7 +15,7 @@
 //   {
 //     year: "2016",
 //     title: "The Beginning",
-//     desc: "Orio Interior was founded with a small team and a big vision — to redefine living spaces.",
+//     desc: "Oria Interior was founded with a small team and a big vision — to redefine living spaces.",
 //   },
 //   {
 //     year: "2019",
@@ -71,7 +71,7 @@
 //         <div className="absolute inset-0">
 //           <img
 //             src="https://images.unsplash.com/photo-1600210492493-0946911123ea?q=80&w=1600"
-//             alt="About Orio Interior"
+//             alt="About Oria Interior"
 //             className="w-full h-full object-cover opacity-25"
 //           />
 //         </div>
@@ -80,7 +80,7 @@
 //             className="font-semibold uppercase tracking-wider text-sm mb-3"
 //             style={{ color: "var(--accent)" }}
 //           >
-//             About Orio Interior
+//             About Oria Interior
 //           </p>
 //           <h1 className="text-4xl md:text-5xl font-bold mb-4">
 //             Designing Spaces,{" "}
@@ -129,7 +129,7 @@
 //             className="mb-4 leading-relaxed"
 //             style={{ color: "var(--text-secondary)" }}
 //           >
-//             Orio Interior is a full-service interior design studio dedicated to
+//             Oria Interior is a full-service interior design studio dedicated to
 //             creating spaces that are not only beautiful but deeply personal. We
 //             work closely with homeowners, businesses, and architects to bring
 //             every vision to life — from concept sketches to the final reveal.
@@ -288,14 +288,14 @@
 //               className="mb-4"
 //             />
 //             <p className="text-lg md:text-xl leading-relaxed opacity-90 mb-6">
-//               "When we started Orio Interior, our goal was simple — to help
+//               "When we started Oria Interior, our goal was simple — to help
 //               people fall in love with the spaces they live and work in every
 //               day. A decade later, that mission hasn't changed. Every project we
 //               take on is a chance to tell a new story through design."
 //             </p>
 //             <h4 className="text-lg font-bold">Naimul Islam</h4>
 //             <p className="text-sm opacity-60">
-//               Founder & Creative Director, Orio Interior
+//               Founder & Creative Director, Oria Interior
 //             </p>
 //           </div>
 //         </motion.div>

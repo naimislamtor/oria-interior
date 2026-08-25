@@ -53,7 +53,7 @@ function Navbar() {
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold" style={{ color: 'var(--accent)' }}>
-          ORIO <span style={{ color: 'var(--text-on-dark)', fontWeight: 300 }}>INTERIOR</span>
+          ORIA <span style={{ color: 'var(--text-on-dark)', fontWeight: 300 }}>INTERIOR</span>
         </Link>
 
         {/* Desktop Nav */}

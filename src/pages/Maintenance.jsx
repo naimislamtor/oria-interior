@@ -189,7 +189,7 @@ function Maintenance() {
               Why Choose Us
             </p>
             <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>
-              The Orio Maintenance Difference
+              The Oria Maintenance Difference
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

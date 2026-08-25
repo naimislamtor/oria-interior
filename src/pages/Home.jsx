@@ -24,7 +24,7 @@ const projects = [
 ]
 
 const testimonials = [
-  { name: 'Sarah Ahmed', role: 'Homeowner', text: 'Orio Interior transformed our home beyond our expectations. Professional, creative, and on time.' },
+  { name: 'Sarah Ahmed', role: 'Homeowner', text: 'Oria Interior transformed our home beyond our expectations. Professional, creative, and on time.' },
   { name: 'Rafiq Hossain', role: 'Restaurant Owner', text: 'They understood our vision perfectly and delivered a stunning dining space that customers love.' },
   { name: 'Nadia Islam', role: 'Office Manager', text: 'Our new office design boosted team morale instantly. Highly recommend their expertise.' },
 ]
@@ -119,7 +119,7 @@ function Home() {
         <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>About Us</p>
           <h2 className="text-3xl md:text-4xl font-bold mb-5" style={{ color: 'var(--text-primary)' }}>Crafting Spaces That Tell Your Story</h2>
-          <p className="mb-4 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>At Orio Interior, we believe every space has the potential to inspire. With over a decade of experience, our team blends creativity with functionality to design interiors that truly reflect your personality and needs.</p>
+          <p className="mb-4 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>At Oria Interior, we believe every space has the potential to inspire. With over a decade of experience, our team blends creativity with functionality to design interiors that truly reflect your personality and needs.</p>
           <div className="grid grid-cols-2 gap-4 mb-6">
             {['Free Consultation', 'Expert Designers', 'On-Time Delivery', 'Quality Materials'].map((item) => (
               <div key={item} className="flex items-center gap-2">

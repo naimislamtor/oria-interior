@@ -6,7 +6,7 @@ import axiosInstance from '../api/axiosInstance'
 const contactInfo = [
   { icon: Phone, label: 'Phone', value: '01983890650', href: 'tel:01983890650' },
   { icon: MessageCircle, label: 'WhatsApp', value: '01983890650', href: 'https://wa.me/8801983890650' },
-  { icon: Mail, label: 'Email', value: 'info@oriointerior.com', href: 'mailto:info@oriointerior.com' },
+  { icon: Mail, label: 'Email', value: 'info@oriainterior.com', href: 'mailto:info@oriainterior.com' },
   { icon: MapPin, label: 'Address', value: 'Dhaka, Bangladesh', href: '#' },
   { icon: Clock, label: 'Working Hours', value: 'Sat–Thu: 9AM – 7PM', href: '#' },
 ]
@@ -80,7 +80,7 @@ function Contact() {
           {/* Map Embed */}
           <div className="rounded-lg overflow-hidden mt-6" style={{ border: '1px solid var(--border-color)' }}>
             <iframe
-              title="Orio Interior Location"
+              title="Oria Interior Location"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d233667.8204673057!2d90.27923704!3d23.7808875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8b087026b81%3A0x8fa563bbdd5904c2!2sDhaka!5e0!3m2!1sen!2sbd!4v1234567890"
               width="100%"
               height="200"

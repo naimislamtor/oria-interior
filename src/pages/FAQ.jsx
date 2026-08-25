@@ -7,8 +7,8 @@ const faqs = [
   {
     category: 'General',
     questions: [
-      { q: 'What services does Orio Interior offer?', a: 'We offer a full range of interior design services including residential, commercial, office, and restaurant interiors, as well as custom furniture design and 3D visualization.' },
-      { q: 'How do I get started with Orio Interior?', a: 'Simply book a free consultation through our website or contact us via phone/WhatsApp. Our team will discuss your vision, budget, and timeline.' },
+      { q: 'What services does Oria Interior offer?', a: 'We offer a full range of interior design services including residential, commercial, office, and restaurant interiors, as well as custom furniture design and 3D visualization.' },
+      { q: 'How do I get started with Oria Interior?', a: 'Simply book a free consultation through our website or contact us via phone/WhatsApp. Our team will discuss your vision, budget, and timeline.' },
       { q: 'Do you work outside of Dhaka?', a: 'Yes! We work across Bangladesh including Chittagong, Sylhet, and other major cities. Contact us to discuss your location.' },
     ],
   },

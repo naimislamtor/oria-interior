@@ -6,7 +6,7 @@ import {
 } from 'lucide-react'
 
 const journey = [
-  { year: '2016', title: 'The Beginning', desc: 'Orio Interior was founded with a small team and a big vision — to redefine living spaces.' },
+  { year: '2016', title: 'The Beginning', desc: 'Oria Interior was founded with a small team and a big vision — to redefine living spaces.' },
   { year: '2019', title: 'Expanding Services', desc: 'Launched commercial and office interior services, growing our client base across the city.' },
   { year: '2022', title: '100+ Projects', desc: 'Crossed 100 successful projects and opened our second design studio.' },
   { year: '2026', title: 'Industry Leader', desc: 'Now recognized as one of the leading interior design firms with 250+ completed projects.' },
@@ -101,7 +101,7 @@ function About() {
         <motion.div className="absolute inset-0 parallax-bg" style={{ y: heroY }}>
           <img
             src="https://images.unsplash.com/photo-1600210492493-0946911123ea?q=80&w=1600"
-            alt="About Orio Interior"
+            alt="About Oria Interior"
             className="w-full h-[130%] object-cover opacity-25"
           />
         </motion.div>
@@ -113,7 +113,7 @@ function About() {
             className="font-semibold uppercase tracking-wider text-sm mb-3"
             style={{ color: 'var(--accent)' }}
           >
-            About Orio Interior
+            About Oria Interior
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -194,7 +194,7 @@ function About() {
             A Studio Built on Passion for Design
           </h2>
           <p className="mb-4 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            Orio Interior is a full-service interior design studio dedicated to creating
+            Oria Interior is a full-service interior design studio dedicated to creating
             spaces that are not only beautiful but deeply personal. We work closely with
             homeowners, businesses, and architects to bring every vision to life — from
             concept sketches to the final reveal.
@@ -301,13 +301,13 @@ function About() {
           <div className="md:col-span-2" style={{ color: 'var(--text-on-dark)' }}>
             <Quote style={{ color: 'var(--accent)' }} size={36} className="mb-4" />
             <p className="text-lg md:text-xl leading-relaxed opacity-90 mb-6">
-              "When we started Orio Interior, our goal was simple — to help people fall in
+              "When we started Oria Interior, our goal was simple — to help people fall in
               love with the spaces they live and work in every day. A decade later, that
               mission hasn't changed. Every project we take on is a chance to tell a new
               story through design."
             </p>
             <h4 className="text-lg font-bold">Naimul Islam</h4>
-            <p className="text-sm opacity-60">Founder & Creative Director, Orio Interior</p>
+            <p className="text-sm opacity-60">Founder & Creative Director, Oria Interior</p>
           </div>
         </motion.div>
       </section>
