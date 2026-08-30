@@ -2,37 +2,40 @@ import { useState, useRef, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { Menu, X, ChevronDown, Sofa, Wrench } from 'lucide-react'
 import ThemeSwitcher from './ThemeSwitcher'
-
-const navLinks = [
-  { name: 'Home', path: '/' },
-  { name: 'About', path: '/about' },
-  { name: 'Portfolio', path: '/portfolio' },
-  { name: 'Gallery', path: '/gallery' },
-  { name: 'Blog', path: '/blog' },
-  { name: 'FAQ', path: '/faq' },
-  { name: 'Contact', path: '/contact' },
-]
-
-const serviceDropdown = [
-  {
-    name: 'Interior Design Services',
-    path: '/services',
-    icon: Sofa,
-    desc: 'Residential, Commercial & More',
-  },
-  {
-    name: 'Maintenance & Repair',
-    path: '/services/maintenance',
-    icon: Wrench,
-    desc: 'Painting, Plumbing, Electrical & More',
-  },
-]
+import LanguageSwitcher from './LanguageSwitcher'
+import { useLanguage } from '../context/LanguageContext'
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
   const dropdownRef = useRef(null)
+  const { t } = useLanguage()
+
+  const navLinks = [
+    { name: t('nav.home'), path: '/' },
+    { name: t('nav.about'), path: '/about' },
+    { name: t('nav.portfolio'), path: '/portfolio' },
+    { name: t('nav.gallery'), path: '/gallery' },
+    { name: t('nav.blog'), path: '/blog' },
+    { name: t('nav.faq'), path: '/faq' },
+    { name: t('nav.contact'), path: '/contact' },
+  ]
+
+  const serviceDropdown = [
+    {
+      name: t('nav.interiorDesign'),
+      path: '/services',
+      icon: Sofa,
+      desc: t('nav.interiorDesc'),
+    },
+    {
+      name: t('nav.maintenance'),
+      path: '/services/maintenance',
+      icon: Wrench,
+      desc: t('nav.maintenanceDesc'),
+    },
+  ]
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -81,7 +84,7 @@ function Navbar() {
               className="flex items-center gap-1 transition hover:opacity-80 text-sm font-medium"
               style={{ color: 'var(--text-on-dark)' }}
             >
-              Services
+              {t('nav.services')}
               <ChevronDown
                 size={16}
                 className="transition-transform duration-300"
@@ -147,18 +150,20 @@ function Navbar() {
 
         {/* Right Side */}
         <div className="hidden md:flex items-center gap-3">
+          <LanguageSwitcher />
           <ThemeSwitcher />
           <Link
             to="/quote"
             className="px-5 py-2 rounded font-semibold transition text-sm"
             style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
           >
-            Get Quote
+            {t('nav.getQuote')}
           </Link>
         </div>
 
         {/* Mobile */}
-        <div className="md:hidden flex items-center gap-3">
+        <div className="md:hidden flex items-center gap-2">
+          <LanguageSwitcher />
           <ThemeSwitcher />
           <button onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -191,7 +196,7 @@ function Navbar() {
                 className="flex items-center gap-1 w-full text-left"
                 style={{ color: 'var(--text-on-dark)' }}
               >
-                Services
+                {t('nav.services')}
                 <ChevronDown
                   size={16}
                   className="transition-transform duration-300"
@@ -240,7 +245,7 @@ function Navbar() {
                 className="block px-4 py-2 rounded font-semibold text-center"
                 style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
               >
-                Get Quote
+                {t('nav.getQuote')}
               </Link>
             </li>
           </ul>

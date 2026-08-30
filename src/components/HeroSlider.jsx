@@ -2,14 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight, ChevronRight, Star } from 'lucide-react'
-
-const typewriterWords = [
-  'Modern Interiors',
-  'Luxury Design',
-  'Creative Spaces',
-  'Timeless Elegance',
-  'Functional Beauty',
-]
+import { useLanguage } from '../context/LanguageContext'
 
 // TODO: এখানে আপনার নিজের mobile image path গুলো বসান
 const mobileHeroImages = [
@@ -38,9 +31,6 @@ function useIsMobile(breakpoint = 768) {
 }
 
 // Mobile-এর জন্য image slideshow
-// - Auto-play: কয়েক সেকেন্ড পর পর নিজে নিজে বদলায়
-// - Swipe/Drag: হাত দিয়ে টেনেও (বাম/ডান) বদলানো যায়
-// - নিচে dot indicator থাকে, কয়টা image আছে ও এখন কোনটায় আছি বোঝার জন্য
 function MobileImageSlideshow({ images, interval = 3500 }) {
   const [current, setCurrent] = useState(0)
   const [direction, setDirection] = useState(1)
@@ -60,7 +50,6 @@ function MobileImageSlideshow({ images, interval = 3500 }) {
     setCurrent(index)
   }
 
-  // Auto-play timer — user drag করলে বা dot চাপলে reset হয়ে আবার শুরু হয়
   useEffect(() => {
     const timer = setInterval(goNext, interval)
     return () => clearInterval(timer)
@@ -121,8 +110,16 @@ function Typewriter({ words, typingSpeed = 90, deletingSpeed = 50, pauseTime = 1
   const [text, setText] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
 
+  // Reset when words array changes (language toggle)
   useEffect(() => {
-    const currentWord = words[wordIndex]
+    setWordIndex(0)
+    setText('')
+    setIsDeleting(false)
+  }, [words])
+
+  useEffect(() => {
+    if (!words || words.length === 0) return
+    const currentWord = words[wordIndex % words.length]
     let timeout
 
     if (!isDeleting && text === currentWord) {
@@ -158,6 +155,9 @@ function Typewriter({ words, typingSpeed = 90, deletingSpeed = 50, pauseTime = 1
 
 function HeroSlider() {
   const isMobile = useIsMobile()
+  const { t } = useLanguage()
+
+  const typewriterWords = t('hero.typewriter') || []
 
   return (
     <section className="relative overflow-hidden" style={{ height: '100vh', minHeight: '600px', maxHeight: '900px' }}>
@@ -197,13 +197,13 @@ function HeroSlider() {
               style={{ backgroundColor: 'rgba(255,255,255,0.08)', borderColor: 'rgba(255,255,255,0.15)', color: 'white' }}
             >
               <Star size={14} style={{ color: 'var(--accent)', fill: 'var(--accent)' }} />
-              Trusted by 180+ Happy Clients
+              {t('hero.trustBadge')}
             </span>
 
             {/* Title */}
             <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-5 text-white">
-              We Design Your{' '}
-              <span style={{ color: 'var(--accent)' }}>Dream Space</span>
+              {t('hero.headlineStart')}{' '}
+              <span style={{ color: 'var(--accent)' }}>{t('hero.headlineSpan')}</span>
             </h1>
 
             {/* Typewriter line */}
@@ -213,7 +213,7 @@ function HeroSlider() {
 
             {/* Subtitle */}
             <p className="text-gray-300 text-lg mb-8 leading-relaxed max-w-xl">
-              From residential homes to commercial spaces — we create interiors that inspire and elevate everyday living.
+              {t('hero.subtitle')}
             </p>
 
             {/* CTA Buttons */}
@@ -223,14 +223,14 @@ function HeroSlider() {
                 className="btn-animated inline-flex items-center gap-2 px-7 py-3 rounded font-semibold"
                 style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
               >
-                Get Free Quote <ArrowRight size={18} className="icon-slide" />
+                {t('hero.getQuoteBtn')} <ArrowRight size={18} className="icon-slide" />
               </Link>
               <Link
                 to="/portfolio"
                 className="inline-flex items-center gap-2 px-7 py-3 rounded font-semibold border transition hover:opacity-80"
                 style={{ borderColor: 'rgba(255,255,255,0.4)', color: 'white' }}
               >
-                View Portfolio <ChevronRight size={18} />
+                {t('hero.viewPortfolioBtn')} <ChevronRight size={18} />
               </Link>
             </div>
           </motion.div>

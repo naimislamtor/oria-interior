@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Phone, Mail, MapPin } from 'lucide-react'
+import { useLanguage } from '../context/LanguageContext'
 
 const socialLinks = [
   {
@@ -41,6 +42,28 @@ const socialLinks = [
 ]
 
 function Footer() {
+  const { t } = useLanguage()
+
+  const navLinks = [
+    { label: t('nav.home'), path: '/' },
+    { label: t('nav.about'), path: '/about' },
+    { label: t('nav.services'), path: '/services' },
+    { label: t('nav.portfolio'), path: '/portfolio' },
+    { label: t('nav.gallery'), path: '/gallery' },
+    { label: t('nav.blog'), path: '/blog' },
+    { label: t('nav.faq'), path: '/faq' },
+    { label: t('nav.contact'), path: '/contact' },
+  ]
+
+  const serviceItems = [
+    t('services.residentialTitle'),
+    t('services.commercialTitle'),
+    t('services.officeTitle'),
+    t('services.restaurantTitle'),
+    t('services.furnitureTitle'),
+    t('services.visualizationTitle'),
+  ]
+
   return (
     <footer
       className="pt-12 pb-6"
@@ -52,7 +75,7 @@ function Footer() {
             ORIA <span style={{ color: 'var(--text-on-dark)', fontWeight: 300 }}>INTERIOR</span>
           </h2>
           <p className="text-sm opacity-70 leading-relaxed">
-            We design beautiful, functional spaces that inspire and elevate everyday living.
+            {t('footer.aboutText')}
           </p>
           <div className="flex gap-3 mt-4">
             {socialLinks.map((social) => (
@@ -72,12 +95,12 @@ function Footer() {
         </div>
 
         <div>
-          <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider opacity-90">Quick Links</h3>
+          <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider opacity-90">{t('footer.quickLinks')}</h3>
           <ul className="space-y-2 text-sm opacity-70">
-            {['/', '/about', '/services', '/portfolio', '/gallery', '/blog', '/faq', '/contact'].map((path, i) => (
-              <li key={path}>
-                <Link to={path} className="hover:opacity-100 transition capitalize">
-                  {['Home', 'About', 'Services', 'Portfolio', 'Gallery', 'Blog', 'FAQ', 'Contact'][i]}
+            {navLinks.map((item) => (
+              <li key={item.path}>
+                <Link to={item.path} className="hover:opacity-100 transition capitalize">
+                  {item.label}
                 </Link>
               </li>
             ))}
@@ -85,19 +108,16 @@ function Footer() {
         </div>
 
         <div>
-          <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider opacity-90">Services</h3>
+          <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider opacity-90">{t('footer.services')}</h3>
           <ul className="space-y-2 text-sm opacity-70">
-            <li>Residential Interior</li>
-            <li>Commercial Interior</li>
-            <li>Office Interior</li>
-            <li>Restaurant Interior</li>
-            <li>Furniture Design</li>
-            <li>3D Visualization</li>
+            {serviceItems.map((s, idx) => (
+              <li key={idx}>{s}</li>
+            ))}
           </ul>
         </div>
 
         <div>
-          <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider opacity-90">Contact Us</h3>
+          <h3 className="font-semibold mb-3 text-sm uppercase tracking-wider opacity-90">{t('footer.contactUs')}</h3>
           <ul className="space-y-3 text-sm">
             <li className="flex items-center gap-2">
               <Phone size={15} style={{ color: 'var(--accent)' }} />
@@ -118,13 +138,13 @@ function Footer() {
             className="mt-4 inline-block px-4 py-2 rounded text-sm font-semibold transition"
             style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
           >
-            Book Appointment
+            {t('footer.bookAppointment')}
           </Link>
         </div>
       </div>
 
       <div className="border-t mt-8 pt-4 text-center text-xs opacity-50" style={{ borderColor: 'var(--border-color)' }}>
-        © {new Date().getFullYear()} Oria Interior. All rights reserved. Developement by Naim's Team.
+        © {new Date().getFullYear()} {t('footer.copyright')} {t('footer.developedBy')}
       </div>
     </footer>
   )

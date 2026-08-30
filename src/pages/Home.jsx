@@ -6,48 +6,7 @@ import {
   Star, Quote, MessageCircle, CheckCircle2, Search, PencilRuler, Hammer, Sparkles
 } from 'lucide-react'
 import HeroSlider from '../components/HeroSlider'
-
-const services = [
-  { icon: Sofa, title: 'Residential Interior', desc: 'Transform your home into a stylish, comfortable living space.' },
-  { icon: Building2, title: 'Commercial Interior', desc: 'Professional designs that reflect your brand identity.' },
-  { icon: Briefcase, title: 'Office Interior', desc: 'Productive, modern workspaces designed for your team.' },
-  { icon: Utensils, title: 'Restaurant Interior', desc: 'Inviting dining spaces that keep customers coming back.' },
-  { icon: PenTool, title: 'Furniture Design', desc: 'Custom furniture crafted to match your interior style.' },
-  { icon: Box, title: '3D Visualization', desc: 'See your space before it\'s built with realistic 3D renders.' },
-]
-
-const projects = [
-  { title: 'Modern Living Room', category: 'Residential', img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800' },
-  { title: 'Luxury Bedroom Suite', category: 'Residential', img: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=800' },
-  { title: 'Corporate Office Space', category: 'Commercial', img: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=800' },
-  { title: 'Fine Dining Restaurant', category: 'Restaurant', img: 'https://images.unsplash.com/photo-1592861956120-e524fc739696?q=80&w=800' },
-]
-
-const testimonials = [
-  { name: 'Sarah Ahmed', role: 'Homeowner', text: 'Oria Interior transformed our home beyond our expectations. Professional, creative, and on time.' },
-  { name: 'Rafiq Hossain', role: 'Restaurant Owner', text: 'They understood our vision perfectly and delivered a stunning dining space that customers love.' },
-  { name: 'Nadia Islam', role: 'Office Manager', text: 'Our new office design boosted team morale instantly. Highly recommend their expertise.' },
-]
-
-const stats = [
-  { number: 250, suffix: '+', label: 'Projects Completed' },
-  { number: 10, suffix: '+', label: 'Years Experience' },
-  { number: 180, suffix: '+', label: 'Happy Clients' },
-  { number: 15, suffix: '+', label: 'Design Awards' },
-]
-
-const process = [
-  { icon: Search, step: '01', title: 'Consultation', desc: 'We learn about your vision, needs, and budget.' },
-  { icon: PencilRuler, step: '02', title: 'Design & Plan', desc: 'Our team creates detailed designs and 3D visuals.' },
-  { icon: Hammer, step: '03', title: 'Execution', desc: 'Skilled craftsmen bring the design to life on-site.' },
-  { icon: Sparkles, step: '04', title: 'Final Reveal', desc: 'Walk into your fully transformed dream space.' },
-]
-
-const blogs = [
-  { title: '10 Modern Interior Trends for 2026', date: 'Jun 15, 2026', img: 'https://images.unsplash.com/photo-1618219944342-824e40a13285?q=80&w=600' },
-  { title: 'How to Choose the Right Color Palette', date: 'Jun 02, 2026', img: 'https://images.unsplash.com/photo-1565182999561-18d7dc61c393?q=80&w=600' },
-  { title: 'Small Space, Big Style: Smart Tips', date: 'May 20, 2026', img: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=600' },
-]
+import { useLanguage } from '../context/LanguageContext'
 
 function Counter({ end, suffix }) {
   const [count, setCount] = useState(0)
@@ -84,6 +43,50 @@ function Counter({ end, suffix }) {
 }
 
 function Home() {
+  const { t } = useLanguage()
+
+  const services = [
+    { icon: Sofa, title: t('services.residentialTitle'), desc: t('services.residentialDesc') },
+    { icon: Building2, title: t('services.commercialTitle'), desc: t('services.commercialDesc') },
+    { icon: Briefcase, title: t('services.officeTitle'), desc: t('services.officeDesc') },
+    { icon: Utensils, title: t('services.restaurantTitle'), desc: t('services.restaurantDesc') },
+    { icon: PenTool, title: t('services.furnitureTitle'), desc: t('services.furnitureDesc') },
+    { icon: Box, title: t('services.visualizationTitle'), desc: t('services.visualizationDesc') },
+  ]
+
+  const projects = [
+    { title: 'Modern Living Room', category: 'Residential', img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800' },
+    { title: 'Luxury Bedroom Suite', category: 'Residential', img: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=800' },
+    { title: 'Corporate Office Space', category: 'Commercial', img: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=800' },
+    { title: 'Fine Dining Restaurant', category: 'Restaurant', img: 'https://images.unsplash.com/photo-1592861956120-e524fc739696?q=80&w=800' },
+  ]
+
+  const testimonials = [
+    { name: 'Sarah Ahmed', role: 'Homeowner', text: 'Oria Interior transformed our home beyond our expectations. Professional, creative, and on time.' },
+    { name: 'Rafiq Hossain', role: 'Restaurant Owner', text: 'They understood our vision perfectly and delivered a stunning dining space that customers love.' },
+    { name: 'Nadia Islam', role: 'Office Manager', text: 'Our new office design boosted team morale instantly. Highly recommend their expertise.' },
+  ]
+
+  const stats = [
+    { number: 250, suffix: '+', label: t('stats.completedProjects') },
+    { number: 10, suffix: '+', label: t('stats.yearsExperience') },
+    { number: 180, suffix: '+', label: t('stats.happyClients') },
+    { number: 15, suffix: '+', label: t('stats.designAwards') },
+  ]
+
+  const process = [
+    { icon: Search, step: '01', title: t('process.step1Title'), desc: t('process.step1Desc') },
+    { icon: PencilRuler, step: '02', title: t('process.step2Title'), desc: t('process.step2Desc') },
+    { icon: Hammer, step: '03', title: t('process.step3Title'), desc: t('process.step3Desc') },
+    { icon: Sparkles, step: '04', title: t('process.step4Title'), desc: t('process.step4Desc') },
+  ]
+
+  const blogs = [
+    { title: '10 Modern Interior Trends for 2026', date: 'Jun 15, 2026', img: 'https://images.unsplash.com/photo-1618219944342-824e40a13285?q=80&w=600' },
+    { title: 'How to Choose the Right Color Palette', date: 'Jun 02, 2026', img: 'https://images.unsplash.com/photo-1565182999561-18d7dc61c393?q=80&w=600' },
+    { title: 'Small Space, Big Style: Smart Tips', date: 'May 20, 2026', img: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=600' },
+  ]
+
   return (
     <div style={{ backgroundColor: 'var(--bg-section)' }}>
 
@@ -111,17 +114,17 @@ function Home() {
               <CheckCircle2 style={{ color: 'var(--accent)' }} size={26} />
             </div>
             <div>
-              <p className="font-bold text-lg" style={{ color: 'var(--text-primary)' }}>10+ Years</p>
-              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Of Excellence</p>
+              <p className="font-bold text-lg" style={{ color: 'var(--text-primary)' }}>{t('about.yearsExcellence')}</p>
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t('about.excellenceTag')}</p>
             </div>
           </div>
         </motion.div>
         <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-          <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>About Us</p>
-          <h2 className="text-3xl md:text-4xl font-bold mb-5" style={{ color: 'var(--text-primary)' }}>Crafting Spaces That Tell Your Story</h2>
-          <p className="mb-4 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>At Oria Interior, we believe every space has the potential to inspire. With over a decade of experience, our team blends creativity with functionality to design interiors that truly reflect your personality and needs.</p>
+          <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>{t('about.tag')}</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-5" style={{ color: 'var(--text-primary)' }}>{t('about.title')}</h2>
+          <p className="mb-4 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{t('about.desc')}</p>
           <div className="grid grid-cols-2 gap-4 mb-6">
-            {['Free Consultation', 'Expert Designers', 'On-Time Delivery', 'Quality Materials'].map((item) => (
+            {[t('about.feature1'), t('about.feature2'), t('about.feature3'), t('about.feature4')].map((item) => (
               <div key={item} className="flex items-center gap-2">
                 <CheckCircle2 size={18} style={{ color: 'var(--accent)' }} className="flex-shrink-0" />
                 <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{item}</span>
@@ -129,7 +132,7 @@ function Home() {
             ))}
           </div>
           <Link to="/about" className="inline-flex items-center gap-2 font-semibold hover:gap-3 transition-all" style={{ color: 'var(--accent)' }}>
-            Learn More About Us <ArrowRight size={18} />
+            {t('about.learnMore')} <ArrowRight size={18} />
           </Link>
         </motion.div>
       </section>
@@ -138,8 +141,8 @@ function Home() {
       <section className="py-20" style={{ backgroundColor: 'var(--bg-card)' }}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-14">
-            <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>Our Services</p>
-            <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>What We Offer</h2>
+            <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>{t('services.tag')}</p>
+            <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>{t('services.title')}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((service, idx) => {
@@ -162,8 +165,8 @@ function Home() {
       {/* Process */}
       <section className="max-w-7xl mx-auto px-4 py-20">
         <div className="text-center mb-14">
-          <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>Our Process</p>
-          <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>How We Work</h2>
+          <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>{t('process.tag')}</p>
+          <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>{t('process.title')}</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
           <div className="hidden md:block absolute top-10 left-0 right-0 h-0.5 mx-20" style={{ backgroundColor: 'var(--border-color)' }} />
@@ -187,22 +190,22 @@ function Home() {
       <section className="py-20" style={{ backgroundColor: 'var(--bg-primary)' }}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-14">
-            <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>Transformations</p>
-            <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-on-dark)' }}>Before & After</h2>
+            <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>{t('transformations.tag')}</p>
+            <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-on-dark)' }}>{t('transformations.title')}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="relative rounded-lg overflow-hidden">
               <img src="https://images.unsplash.com/photo-1484101403633-562f891dc89a?q=80&w=800" alt="Before" className="w-full h-72 object-cover" />
-              <span className="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">BEFORE</span>
+              <span className="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">{t('transformations.before')}</span>
             </div>
             <div className="relative rounded-lg overflow-hidden">
               <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800" alt="After" className="w-full h-72 object-cover" />
-              <span className="absolute top-4 left-4 text-xs font-bold px-3 py-1 rounded-full" style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>AFTER</span>
+              <span className="absolute top-4 left-4 text-xs font-bold px-3 py-1 rounded-full" style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>{t('transformations.after')}</span>
             </div>
           </div>
           <div className="text-center mt-10">
             <Link to="/gallery" className="inline-flex items-center gap-2 border px-7 py-3 rounded font-semibold transition hover:opacity-80" style={{ borderColor: 'rgba(255,255,255,0.3)', color: 'var(--text-on-dark)' }}>
-              View More <ArrowRight size={18} />
+              {t('transformations.viewMore')} <ArrowRight size={18} />
             </Link>
           </div>
         </div>
@@ -211,8 +214,8 @@ function Home() {
       {/* Portfolio */}
       <section className="max-w-7xl mx-auto px-4 py-20">
         <div className="text-center mb-14">
-          <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>Our Work</p>
-          <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>Featured Projects</h2>
+          <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>{t('portfolio.tag')}</p>
+          <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>{t('portfolio.title')}</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {projects.map((project, idx) => (
@@ -228,7 +231,7 @@ function Home() {
         </div>
         <div className="text-center mt-10">
           <Link to="/portfolio" className="inline-flex items-center gap-2 px-7 py-3 rounded font-semibold transition" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-on-dark)' }}>
-            View All Projects <ArrowRight size={18} />
+            {t('portfolio.viewAll')} <ArrowRight size={18} />
           </Link>
         </div>
       </section>
@@ -237,8 +240,8 @@ function Home() {
       <section className="py-20" style={{ backgroundColor: 'var(--bg-card)' }}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-14">
-            <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>Testimonials</p>
-            <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>What Our Clients Say</h2>
+            <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>{t('testimonials.tag')}</p>
+            <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>{t('testimonials.title')}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((t, idx) => (
@@ -260,8 +263,8 @@ function Home() {
       {/* Blog */}
       <section className="max-w-7xl mx-auto px-4 py-20">
         <div className="text-center mb-14">
-          <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>Our Blog</p>
-          <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>Design Tips & Ideas</h2>
+          <p className="font-semibold uppercase tracking-wider text-sm mb-3" style={{ color: 'var(--accent)' }}>{t('blog.tag')}</p>
+          <h2 className="text-3xl md:text-4xl font-bold" style={{ color: 'var(--text-primary)' }}>{t('blog.title')}</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {blogs.map((blog, idx) => (
@@ -276,7 +279,7 @@ function Home() {
         </div>
         <div className="text-center mt-10">
           <Link to="/blog" className="inline-flex items-center gap-2 font-semibold hover:gap-3 transition-all" style={{ color: 'var(--accent)' }}>
-            Read All Articles <ArrowRight size={18} />
+            {t('blog.readAll')} <ArrowRight size={18} />
           </Link>
         </div>
       </section>
@@ -284,14 +287,14 @@ function Home() {
       {/* CTA */}
       <section className="py-16" style={{ backgroundColor: 'var(--accent)' }}>
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: 'var(--bg-primary)' }}>Ready to Transform Your Space?</h2>
-          <p className="mb-8 max-w-xl mx-auto opacity-80" style={{ color: 'var(--bg-primary)' }}>Get a free consultation with our design experts.</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ color: 'var(--bg-primary)' }}>{t('cta.title')}</h2>
+          <p className="mb-8 max-w-xl mx-auto opacity-80" style={{ color: 'var(--bg-primary)' }}>{t('cta.subtitle')}</p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/consultation" className="btn-animated px-7 py-3 rounded font-semibold transition" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-on-dark)' }}>
-              Book Free Consultation
+              {t('cta.bookBtn')}
             </Link>
             <Link to="/contact" className="border px-7 py-3 rounded font-semibold transition hover:opacity-80" style={{ borderColor: 'var(--bg-primary)', color: 'var(--bg-primary)' }}>
-              Contact Us
+              {t('cta.contactBtn')}
             </Link>
           </div>
         </div>
