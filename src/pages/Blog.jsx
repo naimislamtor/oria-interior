@@ -28,7 +28,7 @@ function Blog() {
   const formatDate = (dateStr) =>
     new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
 
-  const filtered = activeCategory === 'All'
+  const filtered = activeCategory === 'All' 
     ? blogs
     : blogs.filter((b) => b.category === activeCategory)
 
@@ -209,3 +209,5 @@ function Blog() {
 }
 
 export default Blog
+
+// block page problem sovle 
