@@ -10,6 +10,12 @@ const emptyForm = {
   title: '', category: 'Design Tips', excerpt: '', content: '', readTime: '',
 }
 
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return ''
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath
+  return `${BASE_URL}/uploads/${imagePath}`
+}
+
 function AdminBlog() {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -53,7 +59,7 @@ function AdminBlog() {
       content: post.content || '',
       readTime: post.readTime || '',
     })
-    setImagePreview(`${BASE_URL}/uploads/${post.image}`)
+    setImagePreview(getImageUrl(post.image))
     setImageFile(null)
     setEditingId(post._id)
     setError('')
@@ -150,7 +156,7 @@ function AdminBlog() {
             <div key={post._id} className="bg-white rounded-xl border border-gray-200 overflow-hidden group">
               <div className="relative h-44 overflow-hidden">
                 <img
-                  src={`${BASE_URL}/uploads/${post.image}`}
+                  src={getImageUrl(post.image)}
                   alt={post.title}
                   className="w-full h-full object-cover"
                 />

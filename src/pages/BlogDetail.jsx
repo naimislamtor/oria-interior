@@ -1,8 +1,25 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Calendar, Clock, Tag, ArrowLeft } from 'lucide-react'
+import { Calendar, Clock, Tag, ArrowLeft, RefreshCw } from 'lucide-react'
 import axiosInstance, { BASE_URL } from '../api/axiosInstance'
+
+const slugify = (text) => {
+  if (!text) return ''
+  const str = text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/[\s\p{P}\p{S}]+/gu, '-')
+    .replace(/^-+|-+$/g, '')
+  return str || 'post'
+}
+
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return ''
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath
+  return `${BASE_URL}/uploads/${imagePath}`
+}
 
 function BlogDetail() {
   const { id } = useParams()
@@ -10,19 +27,45 @@ function BlogDetail() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
-  useEffect(() => {
-    const fetchBlog = async () => {
-      setLoading(true)
-      setError(false)
-      try {
-        const res = await axiosInstance.get(`/api/blog/${id}`)
+  const fetchBlog = async () => {
+    setLoading(true)
+    setError(false)
+    try {
+      // 1. Try direct API lookup by slug or id
+      const res = await axiosInstance.get(`/api/blog/${id}`)
+      if (res.data && res.data.data) {
         setBlog(res.data.data)
-      } catch (err) {
-        setError(true)
-      } finally {
-        setLoading(false)
+        return
       }
+    } catch (err) {
+      console.warn('Direct lookup failed, trying fallback list lookup:', err)
+      // 2. Smart fallback if direct lookup returned 500 (e.g. backend expecting Mongo ID)
+      try {
+        const allRes = await axiosInstance.get('/api/blog')
+        const allBlogs = allRes.data?.data || []
+        const decodedId = decodeURIComponent(id)
+        const found = allBlogs.find(
+          (b) =>
+            b.slug === id ||
+            b._id === id ||
+            b.slug === decodedId ||
+            slugify(b.title) === id ||
+            slugify(b.title) === decodedId
+        )
+        if (found) {
+          setBlog(found)
+          return
+        }
+      } catch (fallbackErr) {
+        console.error('Fallback lookup error:', fallbackErr)
+      }
+      setError(true)
+    } finally {
+      setLoading(false)
     }
+  }
+
+  useEffect(() => {
     fetchBlog()
   }, [id])
 
@@ -32,18 +75,27 @@ function BlogDetail() {
   if (loading) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-24 text-center" style={{ color: 'var(--text-secondary)' }}>
-        Loading...
+        <p className="animate-pulse">Loading article...</p>
       </div>
     )
   }
 
   if (error || !blog) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-24 text-center">
-        <p className="mb-4" style={{ color: 'var(--text-secondary)' }}>Blog post not found.</p>
-        <Link to="/blog" className="font-semibold" style={{ color: 'var(--accent)' }}>
-          ← Back to Blog
-        </Link>
+      <div className="max-w-3xl mx-auto px-4 py-24 text-center space-y-4">
+        <p className="text-lg font-medium" style={{ color: 'var(--text-secondary)' }}>Blog post not found.</p>
+        <div className="flex gap-4 justify-center">
+          <button
+            onClick={fetchBlog}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold"
+            style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
+          >
+            <RefreshCw size={14} /> Retry
+          </button>
+          <Link to="/blog" className="inline-flex items-center gap-1 font-semibold text-xs py-2 px-3" style={{ color: 'var(--accent)' }}>
+            ← Back to Blog
+          </Link>
+        </div>
       </div>
     )
   }
@@ -76,8 +128,8 @@ function BlogDetail() {
             {blog.readTime && <span className="flex items-center gap-1"><Clock size={14} /> {blog.readTime}</span>}
           </div>
 
-          <div className="rounded-xl overflow-hidden mb-8">
-            <img src={`${BASE_URL}/uploads/${blog.image}`} alt={blog.title} className="w-full h-auto object-cover" />
+          <div className="rounded-xl overflow-hidden mb-8 shadow-md">
+            <img src={getImageUrl(blog.image)} alt={blog.title} className="w-full h-auto object-cover" />
           </div>
 
           <p

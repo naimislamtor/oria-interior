@@ -29,7 +29,12 @@ function AdminLogin() {
       await login(email, password)
       navigate('/admin/dashboard')
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.')
+      setError(
+        err.response?.data?.message ||
+        (err.message === 'Network Error'
+          ? 'Network error. Could not connect to authentication server.'
+          : 'Login failed. Please check your credentials and try again.')
+      )
     } finally {
       setLoading(false)
     }

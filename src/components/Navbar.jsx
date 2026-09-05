@@ -162,10 +162,14 @@ function Navbar() {
         </div>
 
         {/* Mobile */}
-        <div className="md:hidden flex items-center gap-2">
-          <LanguageSwitcher />
+        <div className="md:hidden flex items-center gap-1.5 flex-shrink-0">
+          <LanguageSwitcher compact={true} />
           <ThemeSwitcher />
-          <button onClick={() => setMenuOpen(!menuOpen)}>
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="p-1 rounded-lg transition focus:outline-none"
+            aria-label="Toggle navigation menu"
+          >
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>

@@ -6,6 +6,12 @@ import axiosInstance, { BASE_URL } from '../api/axiosInstance'
 
 const categories = ['All', 'Residential', 'Commercial', 'Restaurant', 'Office']
 
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return ''
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath
+  return `${BASE_URL}/uploads/${imagePath}`
+}
+
 function Portfolio() {
   const [activeCategory, setActiveCategory] = useState('All')
   const [portfolioData, setPortfolioData] = useState([])
@@ -113,7 +119,7 @@ function Portfolio() {
                 >
                   <div className="overflow-hidden h-60 relative">
                     <img
-                      src={`${BASE_URL}/uploads/${project.image}`}
+                      src={getImageUrl(project.image)}
                       alt={project.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                     />

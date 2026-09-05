@@ -10,6 +10,12 @@ const emptyForm = {
   title: '', category: 'Residential', location: '', year: '', description: '', featured: false,
 }
 
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return ''
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath
+  return `${BASE_URL}/uploads/${imagePath}`
+}
+
 function AdminPortfolio() {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
@@ -54,7 +60,7 @@ function AdminPortfolio() {
       description: project.description || '',
       featured: project.featured,
     })
-    setImagePreview(`${BASE_URL}/uploads/${project.image}`)
+    setImagePreview(getImageUrl(project.image))
     setImageFile(null)
     setEditingId(project._id)
     setError('')
@@ -151,7 +157,7 @@ function AdminPortfolio() {
             <div key={project._id} className="bg-white rounded-xl border border-gray-200 overflow-hidden group">
               <div className="relative h-44 overflow-hidden">
                 <img
-                  src={`${BASE_URL}/uploads/${project.image}`}
+                  src={getImageUrl(project.image)}
                   alt={project.title}
                   className="w-full h-full object-cover"
                 />
