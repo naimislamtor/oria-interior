@@ -55,14 +55,14 @@ function Home() {
   ]
 
   const projects = [
-    { title: 'Modern Living Room', category: 'Residential', img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800' },
-    { title: 'Luxury Bedroom Suite', category: 'Residential', img: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=800' },
+    { title: 'Modern Living Room', category: 'Residential', img: '/images/hero-mobile-1.jpeg' },
+    { title: 'Luxury Bedroom Suite', category: 'Residential', img: '/images/hero-mobile-3.jpeg' },
     { title: 'Corporate Office Space', category: 'Commercial', img: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=800' },
-    { title: 'Fine Dining Restaurant', category: 'Restaurant', img: 'https://images.unsplash.com/photo-1592861956120-e524fc739696?q=80&w=800' },
+    { title: 'Fine Dining Restaurant', category: 'Restaurant', img: '/images/resturent.jpeg' },
   ]
 
   const testimonials = [
-    { name: 'Sarah Ahmed', role: 'Homeowner', text: 'Oria Interior transformed our home beyond our expectations. Professional, creative, and on time.' },
+    { name: 'Sarah Ahmed', role: 'Hclass="w-full h-72 object-cover group-hover:scale-110 transition duration-500omeowner', text: 'Oria Interior transformed our home beyond our expectations. Professional, creative, and on time.' },
     { name: 'Rafiq Hossain', role: 'Restaurant Owner', text: 'They understood our vision perfectly and delivered a stunning dining space that customers love.' },
     { name: 'Nadia Islam', role: 'Office Manager', text: 'Our new office design boosted team morale instantly. Highly recommend their expertise.' },
   ]
@@ -195,11 +195,11 @@ function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="relative rounded-lg overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1484101403633-562f891dc89a?q=80&w=800" alt="Before" className="w-full h-72 object-cover" />
+              <img src="/images/before.jpeg" alt="Before" className="w-full h-72 object-cover" />
               <span className="absolute top-4 left-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">{t('transformations.before')}</span>
             </div>
             <div className="relative rounded-lg overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800" alt="After" className="w-full h-72 object-cover" />
+              <img src="/images/after.jpeg" alt="After" className="w-full h-72 object-cover" />
               <span className="absolute top-4 left-4 text-xs font-bold px-3 py-1 rounded-full" style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}>{t('transformations.after')}</span>
             </div>
           </div>
