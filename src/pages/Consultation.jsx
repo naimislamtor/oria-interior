@@ -85,7 +85,7 @@ function Consultation() {
             <p className="mb-2" style={{ color: 'var(--text-secondary)' }}>
               Thank you! Our design expert will contact you within 2 hours to schedule your free consultation.
             </p>
-            <a href="https://wa.me/8801983890650" target="_blank" rel="noopener noreferrer"
+            <a href="https://wa.me/8801334003388" target="_blank" rel="noopener noreferrer"
               className="mt-6 btn-animated inline-flex items-center gap-2 px-7 py-3 rounded font-semibold bg-green-500 text-white">
               <MessageCircle size={18} /> Chat on WhatsApp Instead
             </a>

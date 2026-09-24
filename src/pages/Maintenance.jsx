@@ -277,7 +277,7 @@ function Maintenance() {
               Book Appointment <ArrowRight size={18} className="icon-slide" />
             </Link>
             <a
-              href="https://wa.me/8801983890650"
+              href="https://wa.me/8801334003388"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-animated inline-flex items-center gap-2 px-7 py-3 rounded font-semibold bg-green-500 text-white"

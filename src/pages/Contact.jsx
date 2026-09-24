@@ -4,8 +4,8 @@ import { Phone, Mail, MapPin, Clock, MessageCircle, Send, CheckCircle2 } from 'l
 import axiosInstance from '../api/axiosInstance'
 
 const contactInfo = [
-  { icon: Phone, label: 'Phone', value: '01983890650', href: 'tel:01983890650' },
-  { icon: MessageCircle, label: 'WhatsApp', value: '01983890650', href: 'https://wa.me/8801983890650' },
+  { icon: Phone, label: 'Phone', value: '01334003388', href: 'tel:01334003388' },
+  { icon: MessageCircle, label: 'WhatsApp', value: '01334003388', href: 'https://wa.me/8801334003388' },
   { icon: Mail, label: 'Email', value: 'info@oriainterior.com', href: 'mailto:info@oriainterior.com' },
   { icon: MapPin, label: 'Address', value: 'Dhaka, Bangladesh', href: '#' },
   { icon: Clock, label: 'Working Hours', value: 'Sat–Thu: 9AM – 7PM', href: '#' },
@@ -170,7 +170,7 @@ function Contact() {
         <div className="max-w-3xl mx-auto px-4 text-center">
           <p className="font-semibold uppercase tracking-wider text-xs mb-3" style={{ color: 'var(--accent)' }}>Prefer Instant Chat?</p>
           <h2 className="text-2xl font-bold mb-4" style={{ color: 'var(--text-on-dark)' }}>Message Us on WhatsApp</h2>
-          <a href="https://wa.me/8801983890650" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/8801334003388" target="_blank" rel="noopener noreferrer"
             className="btn-animated inline-flex items-center gap-3 px-7 py-3 rounded-lg font-semibold bg-green-500 hover:bg-green-600 text-white transition">
             <MessageCircle size={20} />
             Chat on WhatsApp

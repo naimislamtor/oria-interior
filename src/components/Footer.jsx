@@ -121,7 +121,7 @@ function Footer() {
           <ul className="space-y-3 text-sm">
             <li className="flex items-center gap-2">
               <Phone size={15} style={{ color: 'var(--accent)' }} />
-              <span className="opacity-80">+880334-003388</span>
+              <span className="opacity-80">+8801334-003388</span>
             </li>
             <li className="flex items-center gap-2">
               <Mail size={15} style={{ color: 'var(--accent)' }} />
