@@ -68,10 +68,10 @@ function Home() {
   ]
 
   const stats = [
-    { number: 250, suffix: '+', label: t('stats.completedProjects') },
-    { number: 10, suffix: '+', label: t('stats.yearsExperience') },
-    { number: 180, suffix: '+', label: t('stats.happyClients') },
-    { number: 15, suffix: '+', label: t('stats.designAwards') },
+    { number: 100, suffix: '+', label: t('stats.completedProjects') },
+    { number: 13, suffix: '+', label: t('stats.yearsExperience') },
+    { number: 80, suffix: '+', label: t('stats.happyClients') },
+    { number: 100, suffix: '%', label: t('stats.onTimeDelivery') },
   ]
 
   const process = [

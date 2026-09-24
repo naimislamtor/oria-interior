@@ -143,8 +143,18 @@ function Footer() {
         </div>
       </div>
 
-      <div className="border-t mt-8 pt-4 text-center text-xs opacity-50" style={{ borderColor: 'var(--border-color)' }}>
-        © {new Date().getFullYear()} {t('footer.copyright')} {t('footer.developedBy')}
+      <div className="border-t mt-8 pt-4 text-center text-xs opacity-70 flex flex-wrap justify-center items-center gap-1" style={{ borderColor: 'var(--border-color)' }}>
+        <span>© {new Date().getFullYear()} {t('footer.copyright')}</span>
+        <span>|</span>
+        <a
+          href="https://nethist.online"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:underline transition font-semibold"
+          style={{ color: 'var(--accent)' }}
+        >
+          {t('footer.developedBy')}
+        </a>
       </div>
     </footer>
   )

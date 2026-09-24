@@ -5,7 +5,7 @@ const LanguageContext = createContext()
 
 export function LanguageProvider({ children }) {
   const [lang, setLang] = useState(() => {
-    return localStorage.getItem('oria_lang') || 'bn'
+    return localStorage.getItem('oria_lang') || 'en'
   })
 
   useEffect(() => {

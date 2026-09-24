@@ -34,7 +34,7 @@ export const translations = {
       completedProjects: 'সম্পন্ন প্রজেক্ট',
       yearsExperience: 'বছরের অভিজ্ঞতা',
       happyClients: 'সন্তুষ্ট ক্লায়েন্ট',
-      designAwards: 'ডিজাইন অ্যাওয়ার্ড',
+      onTimeDelivery: 'অন-টাইম ডেলিভারি',
     },
     about: {
       tag: 'আমাদের সম্পর্কে',
@@ -45,7 +45,7 @@ export const translations = {
       feature3: 'সময়মত ডেলিভারি',
       feature4: 'উচ্চমানের মেটেরিয়াল',
       learnMore: 'আমাদের সম্পর্কে আরও জানুন',
-      yearsExcellence: '১০+ বছর',
+      yearsExcellence: '১৩+ বছর',
       excellenceTag: 'সফলতার সাথে',
     },
     services: {
@@ -121,19 +121,20 @@ export const translations = {
       mission: 'আমাদের মিশন',
       missionDesc: 'স্বচ্ছ যোগাযোগ, চমৎকার সৃজনশীলতা ও গ্রাহক সন্তুষ্টির মাধ্যমে মানসম্মত ও অনন্য ইন্টেরিয়র সমাধান দেওয়া।',
       founderQuote: '"যখন আমরা ওরিয়া ইন্টেরিয়র শুরু করি, লক্ষ্য ছিল সহজ — মানুষকে তাদের বসবাস ও কাজের স্পেসের প্রেমে পড়তে সাহায্য করা। এক দশক পরও সেই মিশন বিন্দুমাত্র বদলায়নি। প্রতিটি প্রজেক্টই ডিজাইনের মাধ্যমে নতুন গল্প বলার সুযোগ।"',
-      founderRole: 'প্রতিষ্ঠাতা ও ক্রিয়েটিভ ডিরেক্টর, ওরিয়া ইন্টেরিয়র',
+      founderName: 'MD Sahin Hossain',
+      founderRole: 'ব্যবস্থাপনা পরিচালক, ওরিয়া ইন্টেরিয়র',
       journeyTag: 'আমাদের পথচলা',
       journeyTitle: 'সফলতার মাইলফলক',
       journey: [
-        { year: '২০১৬', title: 'যাত্রা শুরু', desc: 'একটি ছোট টিম ও বড় স্বপ্ন নিয়ে ওরিয়া ইন্টেরিয়রের শুভ সূচনা।' },
-        { year: '২০১৯', title: 'সেবার প্রসার', desc: 'কমার্শিয়াল ও অফিস ইন্টেরিয়র সেবা চালু, ক্লায়েন্ট তালিকা দ্বিগুণ বৃদ্ধি।' },
-        { year: '২০২২', title: '১০০+ প্রজেক্ট', desc: '১০০টিরও বেশি সফল প্রজেক্ট সম্পন্ন ও দ্বিতীয় স্টুডিও স্থাপন।' },
-        { year: '২০২৬', title: 'শীর্ষ স্থান', desc: '২৫০+ সম্পন্ন প্রজেক্ট সহ অন্যতম শীর্ষস্থানীয় ইন্টেরিয়র ডিজাইন ফার্ম।' },
+        { year: '২০১৩', title: 'যাত্রা শুরু', desc: 'একটি ছোট টিম ও বড় স্বপ্ন নিয়ে ওরিয়া ইন্টেরিয়রের শুভ সূচনা।' },
+        { year: '২০১৭', title: 'সরকারি কাজ শুরু', desc: '২০১৭ সাল থেকে সরকারি ও প্রাতিষ্ঠানিক প্রজেক্টের কাজ সফলতার সাথে শুরু।' },
+        { year: '২০২২', title: '৫০+ প্রজেক্ট সম্পন্ন', desc: '২০২২ সালের মধ্যে ৫০টিরও বেশি সফল প্রজেক্ট সম্পন্ন ও গ্রাহকের আস্থা অর্জন।' },
+        { year: '২০২৬', title: 'চলমান অগ্রগতি', desc: '২০২৬ সালে শীর্ষ স্থানে থেকে মানসম্মত সেবায় আমাদের পথচলা অব্যাহত।' },
       ],
       teamTag: 'আমাদের টিম',
       teamTitle: 'আমাদের ডিজাইনের নেপথ্যের কারিগরগণ',
       teamRoles: {
-        founder: 'প্রতিষ্ঠাতা ও ক্রিয়েটিভ ডিরেক্টর',
+        founder: 'ব্যবস্থাপনা পরিচালক',
         lead: 'লিড ইন্টেরিয়র ডিজাইনার',
         arch: 'সিনিয়র আর্কিটেক্ট',
         artist: '৩ডি ভিজ্যুয়ালাইজেশন আর্টিস্ট',
@@ -141,7 +142,7 @@ export const translations = {
       whyTag: 'কেন আমরা',
       whyTitle: 'আমাদের অনন্য বৈশিষ্ট্যসমূহ',
       whyItems: [
-        { title: 'পুরস্কারপ্রাপ্ত ডিজাইন', desc: 'বিগত বছরগুলোতে একাধিক ডিজাইন এক্সিলেন্স অ্যাওয়ার্ড প্রাপ্ত।' },
+        { title: 'অনন্য নান্দনিক ডিজাইন', desc: 'গ্রাহকের পছন্দ ও লাইফস্টাইল অনুযায়ী ১০০% কাস্টমাইজড এবং আধুনিক ডিজাইন।' },
         { title: 'অভিজ্ঞ স্পেশালিস্ট টিম', desc: 'স্থপতি, ডিজাইনার ও কারিগরদের সমন্বয়ে দক্ষ ও অভিজ্ঞ টিম।' },
         { title: 'সৃজনশীল সমাধান', desc: 'আপনার জীবনধারা ও বাজেটের সাথে সামঞ্জস্যপূর্ণ অনন্য ডিজাইন।' },
         { title: 'সর্বোচ্চ মান নিশ্চিতকরণ', desc: 'প্রতিটি ধাপে প্রিমিয়াম মেটেরিয়াল ও কঠোর মান নিয়ন্ত্রণ।' },
@@ -149,6 +150,58 @@ export const translations = {
       ctaTitle: 'আসুন একসাথে সুন্দর কিছু তৈরি করি',
       ctaSubtitle: 'আপনার ইন্টেরিয়র ডিজাইন যাত্রা শুরু করতে প্রস্তুত? ফ্রি কনসালটেশনের জন্য যোগাযোগ করুন।',
       getInTouch: 'যোগাযোগ করুন',
+    },
+    faqPage: {
+      tag: 'সাধারণ প্রশ্নাবলী',
+      titleStart: 'সাধারণত জিজ্ঞাসিত',
+      titleSpan: 'প্রশ্নাবলী',
+      subtitle: 'আমাদের সেবাসমূহ এবং কাজের পদ্ধতি সম্পর্কে আপনার মনে থাকা প্রশ্নসমূহের উত্তর জেনে নিন।',
+      searchPlaceholder: 'প্রশ্ন খুঁজুন...',
+      noResults: 'কোনো প্রশ্ন পাওয়া যায়নি।',
+      stillHaveQuestions: 'আপনার কি আরও প্রশ্ন রয়েছে?',
+      stillQuestionsDesc: 'আমাদের অভিজ্ঞ টিম আপনাকে সাহায্য করতে প্রস্তুত। যেকোনো তথ্যের জন্য যোগাযোগ করুন।',
+      contactBtn: 'যোগাযোগ করুন',
+      allCategory: 'সব',
+      categories: {
+        General: 'সাধারণ',
+        Pricing: 'খরচ ও বাজেট',
+        Process: 'কাজের পদ্ধতি',
+        Services: 'সেবাসমূহ',
+      },
+      faqs: [
+        {
+          category: 'General',
+          questions: [
+            { q: 'ওরিয়া ইন্টেরিয়র কী কী সেবা দিয়ে থাকে?', a: 'আমরা আবাসিক, কমার্শিয়াল, অফিস এবং রেস্টুরেন্ট ইন্টেরিয়রের পাশাপাশি কাস্টম ফার্নিচার ডিজাইন এবং ৩ডি ভিজ্যুয়ালাইজেশন সহ পূর্ণাঙ্গ সেবা দিয়ে থাকি।' },
+            { q: 'ওরিয়া ইন্টেরিয়রের সাথে কীভাবে কাজ শুরু করব?', a: 'আমাদের ওয়েবসাইটের মাধ্যমে একটি ফ্রি কনসালটেশন বুক করুন অথবা ফোন/হোয়াটসঅ্যাপে যোগাযোগ করুন। আমাদের টিম আপনার চিন্তা, বাজেট এবং সময়সীমা নিয়ে বিস্তারিত আলোচনা করবে।' },
+            { q: 'আপনারা কি ঢাকার বাইরেও কাজ করেন?', a: 'হ্যাঁ! আমরা চট্টগ্রাম, সিলেট সহ বাংলাদেশের যেকোনো প্রধান শহর ও জেলায় কাজ করে থাকি।' },
+          ],
+        },
+        {
+          category: 'Pricing',
+          questions: [
+            { q: 'ইন্টেরিয়র ডিজাইন প্রজেক্টে কেমন খরচ হয়?', a: 'প্রজেক্টের পরিধি, স্থান ও মেটেরিয়ালের ওপর ভিত্তি করে খরচ নির্ধারিত হয়। প্রথম কনসালটেশনের পর আমরা কোনো গোপন খরচ ছাড়াই বিস্তারিত কোটেশন প্রদান করি।' },
+            { q: 'প্রথম কনসালটেশন কি ফ্রি?', a: 'হ্যাঁ, আমাদের প্রথম কনসালটেশন সম্পূর্ণ ফ্রি। কাজের আগে গ্রাহকের চাহিদা সঠিকভাবে জানাকে আমরা অগ্রাধিকার দিই।' },
+            { q: 'আপনাদের কি কিস্তিতে পরিশোধের সুবিধা রয়েছে?', a: 'হ্যাঁ, বড় প্রজেক্টের ক্ষেত্রে আমরা ধাপভিত্তিক বা কিস্তিতে পেমেন্টের সুবিধা অফার করে থাকি।' },
+          ],
+        },
+        {
+          category: 'Process',
+          questions: [
+            { q: 'একটি প্রজেক্ট শেষ হতে কতদিন সময় লাগে?', a: 'সময়সীমা প্রজেক্টের আকারের ওপর নির্ভর করে। একটি একক রুমের জন্য ২-৪ সপ্তাহ এবং পুরো বাড়ি বা কমার্শিয়াল স্পেসের জন্য ২-৪ মাস সময় লাগতে পারে।' },
+            { q: 'কাজ শুরুর আগে কি আমি ৩ডি ডিজাইন দেখতে পাব?', a: 'অবশ্যই! কাজ শুরুর আগেই আমরা বিস্তারিত ৩ডি ভিজ্যুয়ালাইজেশন উপস্থাপন করি যাতে প্রতিটি ডিটেইলস পছন্দ হলে তবেই কাজ শুরু করা যায়।' },
+            { q: 'প্রজেক্ট চলাকালীন কি কোনো পরিবর্তন আনা সম্ভব?', a: 'ছোটখাটো পরিবর্তন করা যায়। তবে বড় কোনো পরিবর্তনের ক্ষেত্রে সময় ও খরচে প্রভাব পড়তে পারে যা আলোচনার মাধ্যমে ঠিক করা হয়।' },
+          ],
+        },
+        {
+          category: 'Services',
+          questions: [
+            { q: 'আপনারা কি মেটেরিয়াল ও ফার্নিচার সোর্সিং করে থাকেন?', a: 'হ্যাঁ! মেটেরিয়াল সোর্সিং থেকে শুরু করে ফার্নিচার ও ডেকোর সম্পূর্ণ দায়িত্ব আমরা নিয়ে থাকি।' },
+            { q: 'সব প্রজেক্টেই কি ৩ডি ভিজ্যুয়ালাইজেশন দেওয়া হয়?', a: 'হ্যাঁ, সব ধরনের প্রজেক্টের জন্যই ৩ডি ভিজ্যুয়ালাইজেশন সার্ভিস উপলব্ধ রয়েছে।' },
+            { q: 'আমার বিদ্যমান পুরনো ফার্নিচার দিয়ে কি নতুন ডিজাইন করা সম্ভব?', a: 'অবশ্যই। আপনার বিদ্যমান পছন্দের ফার্নিচারগুলোকে নতুন ডিজাইনের সাথে সামঞ্জস্য রেখে সাজাতে আমাদের অভিজ্ঞ টিম সহায়তা করবে।' },
+          ],
+        },
+      ],
     },
     footer: {
       aboutText: 'আমরা সুন্দর ও কার্যকরী স্পেস তৈরি করি যা দৈনন্দিন জীবনযাত্রাকে সমৃদ্ধ ও অনুপ্রাণিত করে।',
@@ -158,7 +211,7 @@ export const translations = {
       bookAppointment: 'ফ্রি কনসালটেশন বুক করুন',
       bookConsultation: 'ফ্রি কনসালটেশন বুক করুন',
       copyright: 'ওরিয়া ইন্টেরিয়র। সর্বস্বত্ব সংরক্ষিত।',
-      developedBy: 'Dev by Naim\'s Team',
+      developedBy: 'Dev by Nethist',
     },
   },
   en: {
@@ -196,7 +249,7 @@ export const translations = {
       completedProjects: 'Projects Completed',
       yearsExperience: 'Years Experience',
       happyClients: 'Happy Clients',
-      designAwards: 'Design Awards',
+      onTimeDelivery: 'On-Time Delivery',
     },
     about: {
       tag: 'About Us',
@@ -207,7 +260,7 @@ export const translations = {
       feature3: 'On-Time Delivery',
       feature4: 'Quality Materials',
       learnMore: 'Learn More About Us',
-      yearsExcellence: '10+ Years',
+      yearsExcellence: '13+ Years',
       excellenceTag: 'Of Excellence',
     },
     services: {
@@ -283,19 +336,20 @@ export const translations = {
       mission: 'Our Mission',
       missionDesc: 'To deliver thoughtful, high-quality interior design solutions through honest communication, creative excellence, and a deep commitment to client satisfaction.',
       founderQuote: '"When we started Oria Interior, our goal was simple — to help people fall in love with the spaces they live and work in every day. A decade later, that mission hasn\'t changed. Every project we take on is a chance to tell a new story through design."',
-      founderRole: 'Founder & Creative Director, Oria Interior',
+      founderName: 'MD Sahin Hossain',
+      founderRole: 'Managing Director, Oria Interior',
       journeyTag: 'Our Journey',
       journeyTitle: 'Milestones Along the Way',
       journey: [
-        { year: '2016', title: 'The Beginning', desc: 'Oria Interior was founded with a small team and a big vision — to redefine living spaces.' },
-        { year: '2019', title: 'Expanding Services', desc: 'Launched commercial and office interior services, growing our client base across the city.' },
-        { year: '2022', title: '100+ Projects', desc: 'Crossed 100 successful projects and opened our second design studio.' },
-        { year: '2026', title: 'Industry Leader', desc: 'Now recognized as one of the leading interior design firms with 250+ completed projects.' },
+        { year: '2013', title: 'The Beginning', desc: 'Oria Interior was founded with a small team and a big vision.' },
+        { year: '2017', title: 'Government Projects', desc: 'Started executing major government and institutional interior projects.' },
+        { year: '2022', title: '50+ Projects Completed', desc: 'Crossed 50 successful projects with strong client trust and satisfaction.' },
+        { year: '2026', title: 'Continuous Growth', desc: 'Continuing our leadership journey with continuous growth and dedication.' },
       ],
       teamTag: 'Meet The Team',
       teamTitle: 'The People Behind Our Designs',
       teamRoles: {
-        founder: 'Founder & Creative Director',
+        founder: 'Managing Director',
         lead: 'Lead Interior Designer',
         arch: 'Senior Architect',
         artist: '3D Visualization Artist',
@@ -303,7 +357,7 @@ export const translations = {
       whyTag: 'Why Choose Us',
       whyTitle: 'What Sets Us Apart',
       whyItems: [
-        { title: 'Award-Winning Design', desc: 'Recognized with multiple design excellence awards over the years.' },
+        { title: 'Unique & Aesthetic Design', desc: '100% customized modern design tailored to your taste and lifestyle.' },
         { title: 'Expert Team', desc: 'A skilled team of architects, designers, and craftsmen.' },
         { title: 'Creative Solutions', desc: 'Unique, innovative designs tailored to your lifestyle and budget.' },
         { title: 'Quality Assurance', desc: 'Premium materials and rigorous quality checks at every step.' },
@@ -311,6 +365,58 @@ export const translations = {
       ctaTitle: 'Let\'s Build Something Beautiful Together',
       ctaSubtitle: 'Ready to start your interior design journey? Reach out for a free consultation.',
       getInTouch: 'Get In Touch',
+    },
+    faqPage: {
+      tag: 'FAQ',
+      titleStart: 'Frequently Asked',
+      titleSpan: 'Questions',
+      subtitle: 'Find answers to the most common questions about our services and process.',
+      searchPlaceholder: 'Search questions...',
+      noResults: 'No questions found.',
+      stillHaveQuestions: 'Still Have Questions?',
+      stillQuestionsDesc: 'Our team is happy to help. Reach out and we\'ll get back to you promptly.',
+      contactBtn: 'Contact Us',
+      allCategory: 'All',
+      categories: {
+        General: 'General',
+        Pricing: 'Pricing',
+        Process: 'Process',
+        Services: 'Services',
+      },
+      faqs: [
+        {
+          category: 'General',
+          questions: [
+            { q: 'What services does Oria Interior offer?', a: 'We offer a full range of interior design services including residential, commercial, office, and restaurant interiors, as well as custom furniture design and 3D visualization.' },
+            { q: 'How do I get started with Oria Interior?', a: 'Simply book a free consultation through our website or contact us via phone/WhatsApp. Our team will discuss your vision, budget, and timeline.' },
+            { q: 'Do you work outside of Dhaka?', a: 'Yes! We work across Bangladesh including Chittagong, Sylhet, and other major cities. Contact us to discuss your location.' },
+          ],
+        },
+        {
+          category: 'Pricing',
+          questions: [
+            { q: 'How much does an interior design project cost?', a: 'Project costs vary depending on scope, size, and materials. We provide detailed quotations after an initial consultation — ensuring complete transparency with no hidden costs.' },
+            { q: 'Is the initial consultation free?', a: 'Yes, our first consultation is completely free. We believe in understanding your needs before any commitment.' },
+            { q: 'Do you offer flexible payment options?', a: 'Yes, we offer phased payment plans for larger projects. Details are discussed and agreed upon during the consultation stage.' },
+          ],
+        },
+        {
+          category: 'Process',
+          questions: [
+            { q: 'How long does a typical interior design project take?', a: 'Timelines depend on project size. A single room can take 2-4 weeks, while a full home or commercial space may take 2-4 months. We always set clear timelines upfront.' },
+            { q: 'Will I see the design before construction begins?', a: 'Absolutely! We provide detailed 3D visualizations and design presentations before any work begins, so you can approve every detail first.' },
+            { q: 'Can I make changes during the project?', a: 'Minor adjustments are part of our process. Significant scope changes may affect cost and timeline, which we discuss transparently.' },
+          ],
+        },
+        {
+          category: 'Services',
+          questions: [
+            { q: 'Do you handle procurement and furniture sourcing?', a: 'Yes! We manage the entire process including sourcing furniture, materials, and decor — ensuring quality and value for money.' },
+            { q: 'Do you offer 3D visualization for all projects?', a: '3D visualization is available for all project types and is highly recommended for new builds and major renovations.' },
+            { q: 'Can you work with my existing furniture?', a: 'Absolutely. We can design around your existing pieces or advise on what to keep, update, or replace to achieve your desired look.' },
+          ],
+        },
+      ],
     },
     footer: {
       aboutText: 'We design beautiful, functional spaces that inspire and elevate everyday living.',
@@ -320,7 +426,7 @@ export const translations = {
       bookAppointment: 'Book Free Consultation',
       bookConsultation: 'Book Free Consultation',
       copyright: 'Oria Interior. All rights reserved.',
-      developedBy: 'Dev by Naim\'s Team',
+      developedBy: 'Dev by Nethist',
     },
   },
 }
