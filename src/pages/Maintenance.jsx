@@ -101,7 +101,7 @@ function Maintenance() {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                to="/appointment"
+                to="/consultation"
                 className="btn-animated inline-flex items-center gap-2 px-7 py-3 rounded font-semibold"
                 style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
               >
@@ -266,15 +266,15 @@ function Maintenance() {
             Need a Repair or Maintenance Service?
           </h2>
           <p className="mb-8 max-w-xl mx-auto opacity-80" style={{ color: 'var(--bg-primary)' }}>
-            Book an appointment today and our team will be at your doorstep.
+            Get in touch today for a free consultation and service quote.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              to="/appointment"
+              to="/consultation"
               className="btn-animated inline-flex items-center gap-2 px-7 py-3 rounded font-semibold"
               style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-on-dark)' }}
             >
-              Book Appointment <ArrowRight size={18} className="icon-slide" />
+              Book Free Consultation <ArrowRight size={18} className="icon-slide" />
             </Link>
             <a
               href="https://wa.me/8801334003388"

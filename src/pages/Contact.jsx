@@ -7,7 +7,7 @@ const contactInfo = [
   { icon: Phone, label: 'Phone', value: '01334003388', href: 'tel:01334003388' },
   { icon: MessageCircle, label: 'WhatsApp', value: '01334003388', href: 'https://wa.me/8801334003388' },
   { icon: Mail, label: 'Email', value: 'info@oriainterior.com', href: 'mailto:info@oriainterior.com' },
-  { icon: MapPin, label: 'Address', value: 'Dhaka, Bangladesh', href: '#' },
+  { icon: MapPin, label: 'Address', value: '67, Indira Road, West Raja Bazar, Dhaka 1215', href: 'https://maps.google.com/?q=67+Indira+Road+West+Raja+Bazar+Dhaka+1215+Bangladesh' },
   { icon: Clock, label: 'Working Hours', value: 'Sat–Thu: 9AM – 7PM', href: '#' },
 ]
 
@@ -81,7 +81,7 @@ function Contact() {
           <div className="rounded-lg overflow-hidden mt-6" style={{ border: '1px solid var(--border-color)' }}>
             <iframe
               title="Oria Interior Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d233667.8204673057!2d90.27923704!3d23.7808875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8b087026b81%3A0x8fa563bbdd5904c2!2sDhaka!5e0!3m2!1sen!2sbd!4v1234567890"
+              src="https://maps.google.com/maps?q=67+Indira+Road+West+Raja+Bazar+Dhaka+1215+Bangladesh&t=&z=16&ie=UTF8&iwloc=&output=embed"
               width="100%"
               height="200"
               style={{ border: 0 }}

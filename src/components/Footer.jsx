@@ -134,11 +134,11 @@ function Footer() {
             </li>
           </ul>
           <Link
-            to="/appointment"
+            to="/consultation"
             className="mt-4 inline-block px-4 py-2 rounded text-sm font-semibold transition"
             style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
           >
-            {t('footer.bookAppointment')}
+            {t('footer.bookConsultation')}
           </Link>
         </div>
       </div>
