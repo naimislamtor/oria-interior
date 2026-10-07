@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { UserCheck, Phone, Mail, MessageSquare, Search, Filter, Trash2, Edit, Plus, CheckCircle, Clock } from 'lucide-react';
+import { UserCheck, Phone, Mail, Search, Trash2, Edit, Activity, Radio, RefreshCw } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  (typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:5000/api'
+    : 'https://oira-interior-server.onrender.com/api');
 
 export default function AdminLeads() {
   const { token } = useAdminAuth();
   const [leads, setLeads] = useState([]);
+  const [realtimeLogs, setRealtimeLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [sourceFilter, setSourceFilter] = useState('');
@@ -14,6 +20,32 @@ export default function AdminLeads() {
   const [selectedLead, setSelectedLead] = useState(null);
   const [editStatus, setEditStatus] = useState('');
   const [editNotes, setEditNotes] = useState('');
+  const [autoRefresh, setAutoRefresh] = useState(true);
+
+  // Fetch real-time webhook logs
+  const fetchLiveLogs = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/admin/leads/live-logs`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setRealtimeLogs(data.logs || []);
+        }
+      }
+    } catch (err) {
+      console.error('Fetch live logs error:', err);
+    }
+  };
+
+  // Poll live logs every 3 seconds
+  useEffect(() => {
+    fetchLiveLogs();
+    if (!autoRefresh) return;
+    const interval = setInterval(() => {
+      fetchLiveLogs();
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [autoRefresh]);
 
   const fetchLeads = async () => {
     setLoading(true);
@@ -33,33 +65,7 @@ export default function AdminLeads() {
           setLeads(data.leads || []);
         }
       } else {
-        // Mock sample leads if backend has no records yet
-        setLeads([
-          {
-            _id: 'sample-1',
-            name: 'তানভীর আহমেদ',
-            phone: '01711223344',
-            email: 'tanvir@gmail.com',
-            source: 'Website Live Chat',
-            serviceNeeded: '3BHK Flat Interior',
-            details: '৩ বেডরুমের ফ্ল্যাটের আধুনিক ইন্টেরিয়র ৩ডি ডিজাইন ও খরচ জানতে চাই।',
-            status: 'New',
-            notes: 'হোয়াটসঅ্যাপে ক্যাটালগ পাঠাতে হবে',
-            createdAt: new Date().toISOString(),
-          },
-          {
-            _id: 'sample-2',
-            name: 'মাকসুদা বেগম (Facebook)',
-            phone: '01899887766',
-            email: '',
-            source: 'Facebook Messenger',
-            serviceNeeded: 'Living Room Ceiling',
-            details: 'ড্রয়িং রুমের ফলস সিলিং এবং স্পটলাইটের ডিজাইন দেখতে চাই।',
-            status: 'Contacted',
-            notes: 'কল করা হয়েছে, শনিবার সাইট ভিজিট করবে',
-            createdAt: new Date(Date.now() - 86400000).toISOString(),
-          },
-        ]);
+        setLeads([]);
       }
     } catch (error) {
       console.error('Fetch leads error:', error);
@@ -108,6 +114,15 @@ export default function AdminLeads() {
     }
   };
 
+  const handleClearLiveLogs = async () => {
+    try {
+      await fetch(`${API_BASE_URL}/admin/leads/live-logs`, { method: 'DELETE' });
+      setRealtimeLogs([]);
+    } catch (err) {
+      console.error('Clear logs error:', err);
+    }
+  };
+
   const getSourceBadge = (source) => {
     switch (source) {
       case 'Website Live Chat':
@@ -123,14 +138,83 @@ export default function AdminLeads() {
 
   return (
     <div className="space-y-6">
+      {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <UserCheck className="text-amber-600" /> AI Lead Management Hub
+            <UserCheck className="text-amber-600" /> AI Lead Management & Real-Time Monitor
           </h1>
           <p className="text-sm text-gray-500">
-            Website Live AI Chat, Facebook Messenger & WhatsApp auto-captured client leads
+            Real-time Messenger & Webhook auto-responder activity log and client leads hub
           </p>
+        </div>
+      </div>
+
+      {/* 🔴 REAL-TIME LIVE WEBHOOK MONITOR */}
+      <div className="bg-slate-900 text-slate-100 rounded-xl p-5 border border-slate-800 shadow-xl">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+          <div className="flex items-center gap-2">
+            <Radio className="w-5 h-5 text-emerald-400 animate-pulse" />
+            <h2 className="font-bold text-sm tracking-wide text-amber-300">
+              REAL-TIME WEBHOOK & MESSENGER LIVE STREAM
+            </h2>
+            <span className="px-2 py-0.5 rounded-full text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              Live Stream Active (Auto-3s)
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={fetchLiveLogs}
+              className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center gap-1 transition"
+              title="Refresh Logs"
+            >
+              <RefreshCw className="w-3.5 h-3.5" /> Refresh
+            </button>
+            <button
+              onClick={handleClearLiveLogs}
+              className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs transition"
+            >
+              Clear Live Screen
+            </button>
+          </div>
+        </div>
+
+        <div className="space-y-2 max-h-60 overflow-y-auto pr-1 text-xs scrollbar-thin scrollbar-thumb-slate-700">
+          {realtimeLogs.length === 0 ? (
+            <div className="p-4 text-center text-slate-500 italic">
+              Waiting for incoming Webhook or Messenger events... Send a message to Facebook Page or Web Chat to see live stream!
+            </div>
+          ) : (
+            realtimeLogs.map((log) => (
+              <div
+                key={log.id}
+                className="p-2.5 rounded-lg bg-slate-850/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      {log.platform}
+                    </span>
+                    <span className="text-slate-400 text-[11px] font-mono">
+                      {new Date(log.timestamp).toLocaleTimeString()}
+                    </span>
+                    <span className="text-emerald-400 font-semibold text-[11px]">
+                      Sender: {log.senderId}
+                    </span>
+                  </div>
+                  <p className="text-slate-200">
+                    <strong className="text-slate-400">User:</strong> "{log.userText}"
+                  </p>
+                  <p className="text-amber-200/90">
+                    <strong className="text-slate-400">Response:</strong> "{log.aiReply}"
+                  </p>
+                </div>
+                <span className="px-2 py-1 rounded text-[10px] font-bold self-start sm:self-center bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  {log.status}
+                </span>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
@@ -140,7 +224,7 @@ export default function AdminLeads() {
           <Search className="w-4 h-4 absolute left-3 top-3 text-gray-400" />
           <input
             type="text"
-            placeholder="Search by name, phone, email..."
+            placeholder="Search leads by name, phone, email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-amber-500"
@@ -152,7 +236,7 @@ export default function AdminLeads() {
           onChange={(e) => setSourceFilter(e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-amber-500"
         >
-          <option value="">All Sources</option>
+          <option value="">All Lead Sources</option>
           <option value="Website Live Chat">Website Live Chat</option>
           <option value="Facebook Messenger">Facebook Messenger</option>
           <option value="WhatsApp">WhatsApp</option>
