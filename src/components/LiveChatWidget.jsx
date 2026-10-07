@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, X, Send, User, Building2, Sparkles } from 'lucide-react';
+import { MessageSquare, X, Send, User, Building2, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const API_BASE_URL =
@@ -9,14 +9,13 @@ const API_BASE_URL =
     ? "http://localhost:5000/api"
     : "https://oira-interior-server.onrender.com/api");
 
-
 export default function LiveChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       id: 'welcome-1',
       role: 'assistant',
-      text: 'আসসালামু আলাইকুম! ওরিয়া ইন্টেরিয়র (Oria Interior)-এ আপনাকে স্বাগতম। আপনার ফ্ল্যাট, বাসা বা অফিস ডেকোরেশন সংক্রান্ত কোনো প্রশ্ন থাকলে সরাসরি মেসেজ লিখুন!',
+      text: 'আসসালামু আলাইকুম! ওরিয়া ইন্টেরিয়র (Oria Interior)-এ আপনাকে স্বাগতম। আপনার ফ্ল্যাট, বাসা বা অফিস ডেকোরেশন সংক্রান্ত যেকোনো প্রশ্ন থাকলে সরাসরি মেসেজ লিখুন!',
       createdAt: new Date().toISOString(),
     },
   ]);
@@ -48,7 +47,7 @@ export default function LiveChatWidget() {
     'আমাদের সেবা সমূহ',
     'ফ্রি কনসালটেশন কীভাবে পাবো?',
     'বাজেট ও খরচ সম্পর্কে ধারণা দিন',
-    'ডিজাইনারের সাথে কথা বলতে চাই',
+    'WhatsApp-এ কথা বলুন 💬',
   ];
 
   const handleSend = async (textToSend = null) => {
@@ -65,6 +64,23 @@ export default function LiveChatWidget() {
     setMessages((prev) => [...prev, userMsg]);
     if (!textToSend) setInputText('');
     setLoading(true);
+
+    // If query is specifically about WhatsApp
+    if (query.includes('WhatsApp') || query.includes('হোয়াটসঅ্যাপ') || query.toLowerCase().includes('whatsapp')) {
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: 'wa-cta-' + Date.now(),
+            role: 'assistant',
+            text: 'অবশ্যই! ওরিয়া ইন্টেরিয়রের অফিশিয়াল হোয়াটসঅ্যাপে সরাসরি কথা বলতে এবং ডিজাইন ক্যাটালগ পেতে নিচের বাটনে ক্লিক করুন:\nhttps://wa.me/8801334003388',
+            createdAt: new Date().toISOString(),
+          },
+        ]);
+        setLoading(false);
+      }, 500);
+      return;
+    }
 
     try {
       const response = await fetch(`${API_BASE_URL}/chat/send`, {
@@ -110,7 +126,7 @@ export default function LiveChatWidget() {
   const getFallbackReply = (text) => {
     const msg = text.toLowerCase();
     if (msg.includes('সেবা') || msg.includes('সার্ভিস')) {
-      return 'ওরিয়া ইন্টেরিয়র প্রধানত ৪টি ক্যাটাগরিতে প্রফেশনাল সার্ভিস প্রদান করে:\n১. রেসিডেন্সিয়াল ইন্টেরিয়র (ফ্ল্যাট/অ্যাপার্টমেন্ট)\n২. কমার্শিয়াল ও অফিস ডেকোরেশন\n৩. আর্কিটেকচারাল ৩ডি প্ল্যানিং\n৪. কাস্টম ফার্নিচার ও মেকওভার।';
+      return 'ওরিয়া ইন্টেরিয়র প্রধানত ৪টি ক্যাটাগরিতে প্রফেশনাল সার্ভিস প্রদান করে:\n১. রেসিডেন্সিয়াল ইন্টেরিয়র (ফ্ল্যাট/অ্যাপার্টমেন্ট)\n২. কমার্শিয়াল ও অফিস ডেকোরেশন\n৩. আর্কিটেকচারাল ৩ডি প্ল্যানিং\n৪. কাস্টম ফার্নিচার ও কাঠের মেকওভার।';
     }
     if (msg.includes('কনসালটেশন') || msg.includes('ভিজিট')) {
       return 'আমরা সম্পূর্ণ বিনামূল্যে প্রাথমিক কনসালটেশন এবং সাইট মেজারমেন্ট সার্ভিস প্রদান করি। বুক করতে আপনার ফোন নম্বরটি লিখুন।';
@@ -118,7 +134,7 @@ export default function LiveChatWidget() {
     if (msg.includes('বাজেট') || msg.includes('খরচ')) {
       return 'ইন্টেরিয়র ডিজাইন স্কয়ার ফিট এবং উপাদান (Materials)-এর ওপর নির্ভর করে। আপনার স্পেসের আনুমানিক স্কয়ার ফিট ও ফোন নম্বর দিলে আমরা একটি ফ্রি এস্টিমেট বানিয়ে দেব।';
     }
-    return 'ধন্যবাদ আপনার মেসেজের জন্য! আমাদের টিম অতি শীঘ্রই আপনার সাথে সরাসরি যোগাযোগ করবে। ফ্রি কনসালটেশনের জন্য আপনার ফোন নম্বর লিখে দিন।';
+    return 'ধন্যবাদ আপনার মেসেজের জন্য! আমাদের টিম অতি শীঘ্রই আপনার সাথে সরাসরি যোগাযোগ করবে। সরাসরি হোয়াটসঅ্যাপে কথা বলতে লিখুন https://wa.me/8801334003388।';
   };
 
   return (
@@ -196,13 +212,26 @@ export default function LiveChatWidget() {
                   </div>
 
                   <div
-                    className={`max-w-[78%] px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap ${
+                    className={`max-w-[82%] px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap ${
                       msg.role === 'user'
                         ? 'bg-amber-600/90 text-white rounded-tr-none shadow-md'
                         : 'bg-slate-800/90 text-slate-200 border border-slate-700/60 rounded-tl-none shadow-inner'
                     }`}
                   >
                     {msg.text}
+
+                    {(msg.text.includes('wa.me') || msg.text.includes('WhatsApp') || msg.text.includes('হোয়াটসঅ্যাপ') || msg.text.toLowerCase().includes('whatsapp')) && (
+                      <div className="mt-2.5 pt-2 border-t border-slate-700/50">
+                        <a
+                          href="https://wa.me/8801334003388"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs shadow-lg transition-all duration-200 cursor-pointer border border-emerald-400/30 hover:scale-105"
+                        >
+                          <MessageCircle className="w-4 h-4 fill-white text-emerald-600" /> WhatsApp-এ সরাসরি কথা বলুন 💬
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
