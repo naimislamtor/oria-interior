@@ -1,17 +1,19 @@
 import { useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import {
-  LayoutDashboard, Inbox, Image, FileText, Users, LogOut, Menu, X, ExternalLink
+  LayoutDashboard, Inbox, Image, FileText, Users, LogOut, Menu, X, ExternalLink, UserCheck
 } from 'lucide-react'
 import { useAdminAuth } from '../../context/AdminAuthContext'
 
 const navItems = [
   { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
+  { name: 'AI & Social Leads', path: '/admin/leads', icon: UserCheck },
   { name: 'Inquiries', path: '/admin/inquiries', icon: Inbox },
   { name: 'Portfolio', path: '/admin/portfolio', icon: Image },
   { name: 'Blog', path: '/admin/blog', icon: FileText },
   { name: 'Team', path: '/admin/team', icon: Users },
 ]
+
 
 function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)

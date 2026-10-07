@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import WatermarkedImage from '../components/WatermarkedImage'
 
 const beforeAfterData = [
   {
@@ -51,16 +52,20 @@ function BeforeAfterCard({ item }) {
       {/* Image Toggle */}
       <div className="relative h-64 overflow-hidden cursor-pointer" onClick={() => setShowAfter(!showAfter)}>
         <AnimatePresence mode="wait">
-          <motion.img
+          <motion.div
             key={showAfter ? 'after' : 'before'}
-            src={showAfter ? item.after : item.before}
-            alt={showAfter ? 'After' : 'Before'}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="w-full h-full object-cover"
-          />
+            className="w-full h-full"
+          >
+            <WatermarkedImage
+              src={showAfter ? item.after : item.before}
+              alt={showAfter ? 'After' : 'Before'}
+              className="w-full h-full"
+            />
+          </motion.div>
         </AnimatePresence>
         <div className="absolute inset-0 flex items-end justify-between p-4">
           <span

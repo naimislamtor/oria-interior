@@ -3,18 +3,20 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import {
   Mail, FileText, Calendar, MessageSquare, Image, ArrowRight,
-  TrendingUp, Clock
+  TrendingUp, Clock, UserCheck
 } from 'lucide-react'
 import axiosInstance from '../../api/axiosInstance'
 import { useAdminAuth } from '../../context/AdminAuthContext'
 
 const statCards = [
+  { key: 'leads', label: 'Live Chat & Social Leads', icon: UserCheck, endpoint: '/api/admin/leads', color: '#ec4899', path: '/admin/leads' },
   { key: 'contact', label: 'Contact Messages', icon: Mail, endpoint: '/api/contact', color: '#3b82f6', path: '/admin/inquiries' },
   { key: 'quote', label: 'Quote Requests', icon: FileText, endpoint: '/api/quote', color: '#8b5cf6', path: '/admin/inquiries' },
   { key: 'appointment', label: 'Appointments', icon: Calendar, endpoint: '/api/appointment', color: '#10b981', path: '/admin/inquiries' },
   { key: 'consultation', label: 'Consultations', icon: MessageSquare, endpoint: '/api/consultation', color: '#f59e0b', path: '/admin/inquiries' },
   { key: 'portfolio', label: 'Portfolio Projects', icon: Image, endpoint: '/api/portfolio', color: '#c9a84c', path: '/admin/portfolio', public: true },
 ]
+
 
 function AdminDashboard() {
   const [stats, setStats] = useState({})

@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import LiveChatWidget from '../components/LiveChatWidget'
 
 function MainLayout() {
   return (
@@ -10,6 +11,7 @@ function MainLayout() {
         <Outlet />
       </main>
       <Footer />
+      <LiveChatWidget />
     </div>
   )
 }

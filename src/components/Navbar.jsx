@@ -55,8 +55,9 @@ function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="text-xl sm:text-2xl font-bold whitespace-nowrap flex-shrink-0" style={{ color: 'var(--accent)' }}>
-          ORIA <span style={{ color: 'var(--text-on-dark)', fontWeight: 300 }}>INTERIOR</span>
+        <Link to="/" className="flex items-center gap-2 text-xl sm:text-2xl font-bold whitespace-nowrap flex-shrink-0" style={{ color: 'var(--accent)' }}>
+          <img src="/favicon.png" alt="Oria Interior Logo" className="w-7 h-7 sm:w-8 sm:h-8 object-contain" />
+          <span>ORIA <span style={{ color: 'var(--text-on-dark)', fontWeight: 300 }}>INTERIOR</span></span>
         </Link>
 
         {/* Desktop Nav */}

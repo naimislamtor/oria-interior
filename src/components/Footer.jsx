@@ -71,9 +71,12 @@ function Footer() {
     >
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div>
-          <h2 className="text-2xl font-bold mb-3" style={{ color: 'var(--accent)' }}>
-            ORIA <span style={{ color: 'var(--text-on-dark)', fontWeight: 300 }}>INTERIOR</span>
-          </h2>
+          <div className="flex items-center gap-2 mb-3">
+            <img src="/favicon.png" alt="Oria Interior Logo" className="w-8 h-8 object-contain" />
+            <h2 className="text-2xl font-bold" style={{ color: 'var(--accent)' }}>
+              ORIA <span style={{ color: 'var(--text-on-dark)', fontWeight: 300 }}>INTERIOR</span>
+            </h2>
+          </div>
           <p className="text-sm opacity-70 leading-relaxed">
             {t('footer.aboutText')}
           </p>

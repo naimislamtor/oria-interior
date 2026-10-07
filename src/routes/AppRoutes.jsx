@@ -21,6 +21,7 @@ import AdminInquiries from '../pages/admin/AdminInquiries'
 import AdminPortfolio from '../pages/admin/AdminPortfolio'
 import AdminBlog from '../pages/admin/AdminBlog'
 import AdminTeam from '../pages/admin/AdminTeam'
+import AdminLeads from '../pages/admin/AdminLeads'
 import AdminLayout from '../components/admin/AdminLayout'
 import ProtectedRoute from '../components/admin/ProtectedRoute'
 
@@ -55,6 +56,7 @@ function AppRoutes() {
         }
       >
         <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="leads" element={<AdminLeads />} />
         <Route path="inquiries" element={<AdminInquiries />} />
         <Route path="portfolio" element={<AdminPortfolio />} />
         <Route path="blog" element={<AdminBlog />} />
@@ -63,5 +65,6 @@ function AppRoutes() {
     </Routes>
   )
 }
+
 
 export default AppRoutes

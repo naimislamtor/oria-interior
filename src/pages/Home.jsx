@@ -6,6 +6,7 @@ import {
   Star, Quote, MessageCircle, CheckCircle2, Search, PencilRuler, Hammer, Sparkles
 } from 'lucide-react'
 import HeroSlider from '../components/HeroSlider'
+import WatermarkedImage from '../components/WatermarkedImage'
 import { useLanguage } from '../context/LanguageContext'
 
 function Counter({ end, suffix }) {
@@ -221,8 +222,8 @@ function Home() {
           {projects.map((project, idx) => (
             <motion.div key={project.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: idx * 0.1 }}
               className="group relative overflow-hidden rounded-lg cursor-pointer">
-              <img src={project.img} alt={project.title} className="w-full h-72 object-cover group-hover:scale-110 transition duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-5">
+              <WatermarkedImage src={project.img} alt={project.title} className="w-full h-72" imgClassName="group-hover:scale-110 transition duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition flex flex-col justify-end p-5 pointer-events-none">
                 <p className="text-xs font-semibold uppercase mb-1" style={{ color: 'var(--accent)' }}>{project.category}</p>
                 <h3 className="text-white font-bold">{project.title}</h3>
               </div>

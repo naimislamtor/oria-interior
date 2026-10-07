@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { MapPin, Calendar, ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import axiosInstance, { BASE_URL } from '../api/axiosInstance'
+import WatermarkedImage from '../components/WatermarkedImage'
 
 const categories = ['All', 'Residential', 'Commercial', 'Restaurant', 'Office']
 
@@ -118,13 +119,14 @@ function Portfolio() {
                   style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
                 >
                   <div className="overflow-hidden h-60 relative">
-                    <img
+                    <WatermarkedImage
                       src={getImageUrl(project.image)}
                       alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                      className="w-full h-full"
+                      imgClassName="group-hover:scale-110 transition duration-500"
                     />
                     <span
-                      className="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full"
+                      className="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full z-20"
                       style={{ backgroundColor: 'var(--accent)', color: 'var(--bg-primary)' }}
                     >
                       {project.category}
