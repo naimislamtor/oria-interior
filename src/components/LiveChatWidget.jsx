@@ -137,6 +137,29 @@ export default function LiveChatWidget() {
     return 'ধন্যবাদ আপনার মেসেজের জন্য! আমাদের টিম অতি শীঘ্রই আপনার সাথে সরাসরি যোগাযোগ করবে। সরাসরি হোয়াটসঅ্যাপে কথা বলতে লিখুন https://wa.me/8801334003388।';
   };
 
+  const renderFormattedMessage = (text) => {
+    if (!text) return null;
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+
+    return parts.map((part, index) => {
+      if (part.match(/^https?:\/\//)) {
+        return (
+          <a
+            key={index}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-amber-400 hover:text-amber-300 underline font-semibold break-all underline-offset-2 transition-colors"
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
       {/* Floating Toggle Button */}
@@ -218,7 +241,7 @@ export default function LiveChatWidget() {
                         : 'bg-slate-800/90 text-slate-200 border border-slate-700/60 rounded-tl-none shadow-inner'
                     }`}
                   >
-                    {msg.text}
+                    {renderFormattedMessage(msg.text)}
 
                     {(msg.text.includes('wa.me') || msg.text.includes('WhatsApp') || msg.text.includes('হোয়াটসঅ্যাপ') || msg.text.toLowerCase().includes('whatsapp')) && (
                       <div className="mt-2.5 pt-2 border-t border-slate-700/50">
