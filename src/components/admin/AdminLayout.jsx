@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import {
-  LayoutDashboard, Inbox, Image, FileText, Users, LogOut, Menu, X, ExternalLink, UserCheck
+  LayoutDashboard, Inbox, Image, FileText, Users, LogOut, Menu, X, ExternalLink, UserCheck, Bot
 } from 'lucide-react'
 import { useAdminAuth } from '../../context/AdminAuthContext'
 
 const navItems = [
   { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
   { name: 'AI & Social Leads', path: '/admin/leads', icon: UserCheck },
+  { name: 'AI Knowledge Base', path: '/admin/knowledge', icon: Bot },
   { name: 'Inquiries', path: '/admin/inquiries', icon: Inbox },
   { name: 'Portfolio', path: '/admin/portfolio', icon: Image },
   { name: 'Blog', path: '/admin/blog', icon: FileText },
