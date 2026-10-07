@@ -144,16 +144,20 @@ export default function LiveChatWidget() {
 
     return parts.map((part, index) => {
       if (part.match(/^https?:\/\//)) {
+        const cleanUrl = part.replace(/[).,;!\]]+$/, '');
+        const trailing = part.slice(cleanUrl.length);
         return (
-          <a
-            key={index}
-            href={part}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-amber-400 hover:text-amber-300 underline font-semibold break-all underline-offset-2 transition-colors"
-          >
-            {part}
-          </a>
+          <React.Fragment key={index}>
+            <a
+              href={cleanUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-amber-400 hover:text-amber-300 underline font-semibold break-all underline-offset-2 transition-colors"
+            >
+              {cleanUrl}
+            </a>
+            {trailing}
+          </React.Fragment>
         );
       }
       return part;
