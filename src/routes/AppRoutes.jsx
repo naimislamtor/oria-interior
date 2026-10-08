@@ -23,6 +23,7 @@ import AdminBlog from '../pages/admin/AdminBlog'
 import AdminTeam from '../pages/admin/AdminTeam'
 import AdminLeads from '../pages/admin/AdminLeads'
 import AdminKnowledge from '../pages/admin/AdminKnowledge'
+import AdminGallery from '../pages/admin/AdminGallery'
 import AdminLayout from '../components/admin/AdminLayout'
 import ProtectedRoute from '../components/admin/ProtectedRoute'
 
@@ -59,6 +60,7 @@ function AppRoutes() {
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="leads" element={<AdminLeads />} />
         <Route path="knowledge" element={<AdminKnowledge />} />
+        <Route path="gallery" element={<AdminGallery />} />
         <Route path="inquiries" element={<AdminInquiries />} />
         <Route path="portfolio" element={<AdminPortfolio />} />
         <Route path="blog" element={<AdminBlog />} />

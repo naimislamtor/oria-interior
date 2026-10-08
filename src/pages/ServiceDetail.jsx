@@ -2,6 +2,7 @@ import { useParams, Link, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react'
 import { servicesData } from '../data/servicesData'
+import WatermarkedImage from '../components/WatermarkedImage'
 
 function ServiceDetail() {
   const { slug } = useParams()
@@ -132,10 +133,13 @@ function ServiceDetail() {
                 transition={{ duration: 0.4, delay: idx * 0.1 }}
                 className="overflow-hidden rounded-lg group cursor-pointer"
               >
-                <img
+                <WatermarkedImage
                   src={img}
                   alt={`${service.title} ${idx + 1}`}
-                  className="w-full h-64 object-cover group-hover:scale-110 transition duration-500"
+                  className="w-full h-64"
+                  imgClassName="group-hover:scale-110 transition duration-500"
+                  overlayText="ORIA"
+                  showOverlayText={true}
                 />
               </motion.div>
             ))}

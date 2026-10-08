@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { servicesData } from '../data/servicesData'
+import WatermarkedImage from '../components/WatermarkedImage'
 
 function Services() {
   return (
@@ -12,10 +13,11 @@ function Services() {
         style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-on-dark)' }}
       >
         <div className="absolute inset-0">
-          <img
+          <WatermarkedImage
             src="https://images.unsplash.com/photo-1616137422495-1e9e46e2aa77?q=80&w=1600"
             alt="Our Services"
-            className="w-full h-full object-cover opacity-25"
+            className="w-full h-full opacity-25"
+            showOverlayText={false}
           />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 text-center">
@@ -63,14 +65,17 @@ function Services() {
               >
                 <Link
                   to={`/services/${service.slug}`}
-                  className="premium-card block group"
+                  className="premium-card block group overflow-hidden"
                   style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
                 >
-                  <div className="overflow-hidden h-56">
-                    <img
+                  <div className="overflow-hidden h-56 relative">
+                    <WatermarkedImage
                       src={service.heroImg}
                       alt={service.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                      className="w-full h-full"
+                      imgClassName="group-hover:scale-110 transition duration-500"
+                      overlayText="ORIA"
+                      showOverlayText={true}
                     />
                   </div>
                   <div className="p-6">

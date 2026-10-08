@@ -9,6 +9,8 @@ function WatermarkedImage({
   watermarkPosition = 'bottom-right',
   watermarkSize = 'md',
   showText = true,
+  overlayText = 'ORIA',
+  showOverlayText = true,
   ...props
 }) {
   const [error, setError] = useState(false)
@@ -41,6 +43,21 @@ function WatermarkedImage({
         className={`w-full h-full object-cover ${imgClassName}`}
         {...props}
       />
+
+      {/* Centered Shadow Overlay Text ("ORIA") */}
+      {showOverlayText && overlayText && !error && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 select-none">
+          <span
+            className="text-3xl md:text-5xl font-black tracking-[0.25em] text-white/35 uppercase transition-all duration-300 group-hover:scale-105 group-hover:text-white/45"
+            style={{
+              fontFamily: 'Outfit, sans-serif',
+              textShadow: '0 4px 18px rgba(0,0,0,0.85), 0 2px 4px rgba(0,0,0,0.9), 0 0 10px rgba(201,168,76,0.3)',
+            }}
+          >
+            {overlayText}
+          </span>
+        </div>
+      )}
 
       {/* Auto Logo Watermark Badge */}
       {!error && (

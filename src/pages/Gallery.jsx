@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import WatermarkedImage from '../components/WatermarkedImage'
+import axiosInstance from '../api/axiosInstance'
 
-const beforeAfterData = [
+const defaultBeforeAfterData = [
   {
     id: 1,
     title: 'Living Room Transformation',
@@ -35,10 +36,10 @@ const beforeAfterData = [
   },
 ]
 
-const categories = ['All', 'Residential', 'Office', 'Restaurant']
-
 function BeforeAfterCard({ item }) {
   const [showAfter, setShowAfter] = useState(false)
+  const beforeSrc = item.beforeImage || item.before
+  const afterSrc = item.afterImage || item.after
 
   return (
     <motion.div
@@ -61,7 +62,7 @@ function BeforeAfterCard({ item }) {
             className="w-full h-full"
           >
             <WatermarkedImage
-              src={showAfter ? item.after : item.before}
+              src={showAfter ? afterSrc : beforeSrc}
               alt={showAfter ? 'After' : 'Before'}
               className="w-full h-full"
             />
@@ -113,17 +114,39 @@ function BeforeAfterCard({ item }) {
       <div className="p-5">
         <span className="text-xs font-semibold" style={{ color: 'var(--accent)' }}>{item.category}</span>
         <h3 className="font-bold mt-1" style={{ color: 'var(--text-primary)' }}>{item.title}</h3>
+        {item.description && (
+          <p className="text-xs mt-2 opacity-75" style={{ color: 'var(--text-secondary)' }}>{item.description}</p>
+        )}
       </div>
     </motion.div>
   )
 }
 
 function Gallery() {
+  const [items, setItems] = useState(defaultBeforeAfterData)
   const [activeCategory, setActiveCategory] = useState('All')
+  const [categories, setCategories] = useState(['All', 'Residential', 'Office', 'Restaurant'])
+
+  useEffect(() => {
+    const fetchGallery = async () => {
+      try {
+        const res = await axiosInstance.get('/api/gallery')
+        if (res.data?.data && res.data.data.length > 0) {
+          setItems(res.data.data)
+          const fetchedCats = Array.from(new Set(res.data.data.map(i => i.category).filter(Boolean)))
+          const combinedCats = Array.from(new Set(['All', 'Residential', 'Office', 'Restaurant', ...fetchedCats]))
+          setCategories(combinedCats)
+        }
+      } catch (err) {
+        console.error('Failed to fetch gallery items:', err)
+      }
+    }
+    fetchGallery()
+  }, [])
 
   const filtered = activeCategory === 'All'
-    ? beforeAfterData
-    : beforeAfterData.filter((p) => p.category === activeCategory)
+    ? items
+    : items.filter((p) => p.category === activeCategory)
 
   return (
     <div style={{ backgroundColor: 'var(--bg-section)' }}>
@@ -191,8 +214,8 @@ function Gallery() {
       <section className="max-w-7xl mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <AnimatePresence>
-            {filtered.map((item) => (
-              <BeforeAfterCard key={item.id} item={item} />
+            {filtered.map((item, idx) => (
+              <BeforeAfterCard key={item._id || item.id || idx} item={item} />
             ))}
           </AnimatePresence>
         </div>
