@@ -1,427 +1,288 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Pencil, Trash2, X, RefreshCw, Image, Sparkles, Layers, Search } from 'lucide-react'
+import { Plus, Pencil, Trash2, X, RefreshCw, Upload, Search, CloudUpload, CheckCircle2 } from 'lucide-react'
 import axiosInstance from '../../api/axiosInstance'
-import { useAdminAuth } from '../../context/AdminAuthContext'
 
-const emptyForm = {
-  title: '',
-  beforeImage: '',
-  afterImage: '',
-  category: 'Residential',
-  description: '',
+const CATEGORIES = ['Residential', 'Commercial', 'Restaurant', 'Office']
+const EMPTY = { title: '', category: 'Residential', description: '' }
+
+const ImageUploadBox = ({ label, file, preview, onChange, required }) => {
+  const ref = useRef()
+  return (
+    <div>
+      <label style={{ display:'block', fontWeight:600, fontSize:'0.82rem', marginBottom:'0.4rem', color:'var(--text-secondary)' }}>
+        {label} {required && '*'}
+      </label>
+      <div
+        onClick={() => ref.current.click()}
+        style={{
+          border: '2px dashed', borderColor: preview ? 'var(--accent)' : 'var(--border-color)',
+          borderRadius: '10px', height: '140px', cursor: 'pointer', overflow: 'hidden',
+          position: 'relative', backgroundColor: 'var(--bg-section)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transition: 'all 0.2s'
+        }}
+      >
+        {preview ? (
+          <>
+            <img src={preview} alt="preview" style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+            <div style={{
+              position:'absolute', bottom:0, left:0, right:0, padding:'0.3rem',
+              background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', gap:'0.3rem'
+            }}>
+              <CheckCircle2 size={13} color="#4ade80" />
+              <span style={{ color:'#fff', fontSize:'0.7rem' }}>{file ? 'নতুন ছবি নির্বাচিত' : 'বিদ্যমান ছবি'}</span>
+            </div>
+          </>
+        ) : (
+          <div style={{ textAlign:'center', color:'var(--text-muted)' }}>
+            <CloudUpload size={28} style={{ margin:'0 auto 0.5rem' }} />
+            <p style={{ fontSize:'0.78rem' }}>ক্লিক করে ছবি আপলোড করুন</p>
+            <p style={{ fontSize:'0.7rem', marginTop:'0.2rem' }}>JPG, PNG, WebP (max 10MB)</p>
+          </div>
+        )}
+      </div>
+      <input ref={ref} type="file" accept="image/*" className="hidden" onChange={onChange} />
+    </div>
+  )
 }
 
-function AdminGallery() {
+export default function AdminGallery() {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [modalOpen, setModalOpen] = useState(false)
-  const [editingId, setEditingId] = useState(null)
-  const [form, setForm] = useState(emptyForm)
+  const [search, setSearch] = useState('')
+  const [modal, setModal] = useState(false)
+  const [editId, setEditId] = useState(null)
+  const [form, setForm] = useState(EMPTY)
+  const [beforeFile, setBeforeFile] = useState(null)
+  const [afterFile, setAfterFile] = useState(null)
+  const [beforePreview, setBeforePreview] = useState(null)
+  const [afterPreview, setAfterPreview] = useState(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
-  const [successMsg, setSuccessMsg] = useState('')
-  const { token } = useAdminAuth()
+  const [toast, setToast] = useState(null)
+  const [uploading, setUploading] = useState(false)
+
+  const showToast = (msg, type='success') => {
+    setToast({ msg, type })
+    setTimeout(() => setToast(null), 3000)
+  }
 
   const fetchItems = async () => {
     setLoading(true)
     try {
       const res = await axiosInstance.get('/api/gallery')
       setItems(res.data.data || [])
-    } catch (err) {
-      console.error('Fetch gallery items error:', err)
-    } finally {
-      setLoading(false)
-    }
+    } catch { } finally { setLoading(false) }
   }
 
-  useEffect(() => {
-    fetchItems()
-  }, [])
+  useEffect(() => { fetchItems() }, [])
 
-  const openAddModal = () => {
-    setForm(emptyForm)
-    setEditingId(null)
-    setError('')
-    setModalOpen(true)
+  const openAdd = () => {
+    setForm(EMPTY); setEditId(null)
+    setBeforeFile(null); setAfterFile(null)
+    setBeforePreview(null); setAfterPreview(null)
+    setError(''); setModal(true)
   }
 
-  const openEditModal = (item) => {
-    setForm({
-      title: item.title || '',
-      beforeImage: item.beforeImage || '',
-      afterImage: item.afterImage || '',
-      category: item.category || 'Residential',
-      description: item.description || '',
-    })
-    setEditingId(item._id)
-    setError('')
-    setModalOpen(true)
+  const openEdit = (item) => {
+    setForm({ title: item.title, category: item.category, description: item.description || '' })
+    setEditId(item._id)
+    setBeforeFile(null); setAfterFile(null)
+    setBeforePreview(item.beforeImage || null)
+    setAfterPreview(item.afterImage || null)
+    setError(''); setModal(true)
   }
 
-  const closeModal = () => {
-    setModalOpen(false)
-    setForm(emptyForm)
-    setEditingId(null)
-    setError('')
+  const handleFileChange = (type, e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    const url = URL.createObjectURL(file)
+    if (type === 'before') { setBeforeFile(file); setBeforePreview(url) }
+    else { setAfterFile(file); setAfterPreview(url) }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!form.title.trim() || !form.beforeImage.trim() || !form.afterImage.trim()) {
-      setError('শিরোনাম, Before ছবির লিংক এবং After ছবির লিংক পূরণ করা বাধ্যতামূলক।')
-      return
-    }
+    if (!form.title.trim()) { setError('শিরোনাম দেওয়া বাধ্যতামূলক'); return }
+    if (!editId && (!beforeFile || !afterFile)) { setError('Before ও After দুটো ছবিই প্রয়োজন'); return }
 
-    setSaving(true)
-    setError('')
-
-    const payload = {
-      title: form.title.trim(),
-      beforeImage: form.beforeImage.trim(),
-      afterImage: form.afterImage.trim(),
-      category: form.category || 'Residential',
-      description: form.description.trim(),
-    }
-
+    setSaving(true); setUploading(true); setError('')
     try {
-      const headers = { Authorization: `Bearer ${token}` }
-      if (editingId) {
-        await axiosInstance.put(`/api/gallery/${editingId}`, payload, { headers })
-        setSuccessMsg('গ্যালারি ট্রান্সফরমেশন সফলভাবে আপডেট করা হয়েছে!')
-      } else {
-        await axiosInstance.post('/api/gallery', payload, { headers })
-        setSuccessMsg('নতুন গ্যালারি ট্রান্সফরমেশন যুক্ত করা হয়েছে!')
-      }
+      const fd = new FormData()
+      fd.append('title', form.title)
+      fd.append('category', form.category)
+      fd.append('description', form.description)
+      if (beforeFile) fd.append('beforeImage', beforeFile)
+      if (afterFile) fd.append('afterImage', afterFile)
 
-      closeModal()
-      fetchItems()
-      setTimeout(() => setSuccessMsg(''), 4000)
+      if (editId) {
+        await axiosInstance.put(`/api/gallery/${editId}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } })
+        showToast('Gallery item আপডেট হয়েছে ✅')
+      } else {
+        await axiosInstance.post('/api/gallery', fd, { headers: { 'Content-Type': 'multipart/form-data' } })
+        showToast('নতুন transformation যোগ হয়েছে ✅')
+      }
+      setModal(false); fetchItems()
     } catch (err) {
-      console.error('Save gallery error:', err)
-      setError(err.response?.data?.message || 'সংরক্ষণে সমস্যা হয়েছে। আবার চেষ্টা করুন।')
-    } finally {
-      setSaving(false)
-    }
+      setError(err?.response?.data?.message || 'সংরক্ষণ ব্যর্থ হয়েছে')
+    } finally { setSaving(false); setUploading(false) }
   }
 
   const handleDelete = async (id) => {
-    if (!window.confirm('আপনি কি নিশ্চিত যে এই Before & After প্রজেক্টটি মুছে ফেলতে চান?')) return
-
+    if (!confirm('এই item মুছে ফেলবেন? Cloudinary থেকেও মুছে যাবে।')) return
     try {
-      const headers = { Authorization: `Bearer ${token}` }
-      await axiosInstance.delete(`/api/gallery/${id}`, { headers })
-      setSuccessMsg('প্রজেক্টটি মুছে ফেলা হয়েছে!')
-      fetchItems()
-      setTimeout(() => setSuccessMsg(''), 4000)
-    } catch (err) {
-      console.error('Delete error:', err)
-      alert('মুছে ফেলতে সমস্যা হয়েছে।')
-    }
+      await axiosInstance.delete(`/api/gallery/${id}`)
+      setItems(p => p.filter(i => i._id !== id))
+      showToast('মুছে ফেলা হয়েছে')
+    } catch { showToast('মুছতে ব্যর্থ', 'error') }
   }
 
-  const filteredItems = items.filter((item) => {
-    const q = searchTerm.toLowerCase()
-    return (
-      item.title?.toLowerCase().includes(q) ||
-      item.category?.toLowerCase().includes(q) ||
-      item.description?.toLowerCase().includes(q)
-    )
-  })
+  const filtered = items.filter(i => i.title?.toLowerCase().includes(search.toLowerCase()) || i.category?.toLowerCase().includes(search.toLowerCase()))
 
   return (
-    <div className="space-y-6">
-      {/* Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-amber-950/60 via-slate-900 to-slate-900 p-6 rounded-2xl border border-amber-500/20">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
-            <Layers className="w-7 h-7 text-amber-400" /> Before & After গ্যালারি ম্যানেজমেন্ট
-          </h1>
-          <p className="text-sm text-slate-300 mt-1 max-w-2xl">
-            এখানে আপনার কাজের "Before" (আগের ছবি) এবং "After" (পরের ছবি) যুক্ত করুন। এগুলো সরাসরি ওয়েবসাইটের ট্রান্সফরমেশন গ্যালারি এবং হোম পেজে দেখা যাবে।
-          </p>
+    <div style={{ minHeight:'100vh' }}>
+      {/* Toast */}
+      {toast && (
+        <div style={{
+          position:'fixed', top:'1.5rem', right:'1.5rem', zIndex:9999,
+          padding:'0.8rem 1.4rem', borderRadius:'10px',
+          backgroundColor: toast.type==='success' ? 'var(--accent)' : '#ef4444',
+          color:'#fff', fontWeight:700, boxShadow:'0 4px 24px rgba(0,0,0,0.2)',
+          display:'flex', alignItems:'center', gap:'0.5rem'
+        }}>
+          <CheckCircle2 size={17} /> {toast.msg}
         </div>
-
-        <button
-          onClick={openAddModal}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-semibold text-sm shadow-lg transition-all cursor-pointer shrink-0"
-        >
-          <Plus className="w-5 h-5" /> নতুন ট্রান্সফরমেশন যুক্ত করুন
-        </button>
-      </div>
-
-      {/* Success Alert */}
-      {successMsg && (
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-sm font-medium">
-          {successMsg}
-        </motion.div>
       )}
 
-      {/* Controls Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
-        <div className="relative w-full sm:w-96">
-          <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="শিরোনাম বা ক্যাটাগরি দিয়ে খুঁজুন..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-950 border border-slate-800 rounded-xl text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-amber-500"
-          />
+      {/* Header */}
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1.5rem', flexWrap:'wrap', gap:'1rem' }}>
+        <div>
+          <h1 style={{ fontSize:'1.6rem', fontWeight:700, color:'var(--text-primary)', margin:0 }}>Before & After Gallery</h1>
+          <p style={{ color:'var(--text-muted)', fontSize:'0.85rem', margin:'0.2rem 0 0' }}>ছবি Cloudinary-তে save হবে • মোট {items.length}টি</p>
         </div>
-
-        <button
-          onClick={fetchItems}
-          className="inline-flex items-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-medium transition cursor-pointer"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} /> রিফ্রেশ
-        </button>
+        <div style={{ display:'flex', gap:'0.7rem' }}>
+          <button onClick={fetchItems} style={{ display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.6rem 1rem', borderRadius:'8px', border:'1px solid var(--border-color)', background:'var(--bg-card)', color:'var(--text-secondary)', cursor:'pointer', fontSize:'0.85rem' }}>
+            <RefreshCw size={14} /> Refresh
+          </button>
+          <button onClick={openAdd} style={{ display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.6rem 1.1rem', borderRadius:'8px', border:'none', background:'var(--accent)', color:'var(--bg-primary)', cursor:'pointer', fontWeight:700, fontSize:'0.85rem' }}>
+            <Plus size={15} /> নতুন যোগ করুন
+          </button>
+        </div>
       </div>
 
-      {/* Gallery Items Grid */}
+      {/* Search */}
+      <div style={{ position:'relative', marginBottom:'1.5rem', maxWidth:'360px' }}>
+        <Search size={15} style={{ position:'absolute', left:'0.85rem', top:'50%', transform:'translateY(-50%)', color:'var(--text-muted)' }} />
+        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="খুঁজুন..."
+          style={{ width:'100%', padding:'0.65rem 1rem 0.65rem 2.4rem', borderRadius:'8px', border:'1px solid var(--border-color)', background:'var(--bg-card)', color:'var(--text-primary)', fontSize:'0.88rem', boxSizing:'border-box' }} />
+      </div>
+
+      {/* Grid */}
       {loading ? (
-        <div className="text-center py-12 text-slate-400">
-          <RefreshCw className="w-8 h-8 animate-spin mx-auto text-amber-400 mb-2" />
-          গ্যালারি লোড হচ্ছে...
-        </div>
-      ) : filteredItems.length === 0 ? (
-        <div className="text-center py-16 bg-slate-900/40 rounded-2xl border border-slate-800 text-slate-400 space-y-3">
-          <Image className="w-12 h-12 mx-auto text-slate-500 opacity-60" />
-          <p className="text-base font-semibold">কোনো গ্যালারি ট্রান্সফরমেশন যুক্ত করা হয়নি</p>
-          <p className="text-xs text-slate-500">নতুন ছবির জুড়ি যোগ করতে উপরের "নতুন ট্রান্সফরমেশন যুক্ত করুন" বাটনে ক্লিক করুন।</p>
-        </div>
+        <div style={{ textAlign:'center', padding:'4rem', color:'var(--text-muted)' }}>লোড হচ্ছে...</div>
+      ) : filtered.length === 0 ? (
+        <div style={{ textAlign:'center', padding:'4rem', color:'var(--text-muted)' }}>কোনো item নেই</div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredItems.map((item) => (
-            <motion.div
-              key={item._id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-slate-900/80 border border-slate-800 hover:border-amber-500/40 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between"
-            >
-              {/* Card Header */}
-              <div className="p-4 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(320px, 1fr))', gap:'1.2rem' }}>
+          {filtered.map(item => (
+            <div key={item._id} style={{ background:'var(--bg-card)', border:'1px solid var(--border-color)', borderRadius:'12px', overflow:'hidden' }}>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'2px' }}>
+                <div style={{ position:'relative' }}>
+                  <img src={item.beforeImage} alt="before" style={{ width:'100%', height:'140px', objectFit:'cover', display:'block' }} />
+                  <span style={{ position:'absolute', top:'0.4rem', left:'0.4rem', background:'rgba(0,0,0,0.6)', color:'#fff', fontSize:'0.65rem', fontWeight:700, padding:'0.15rem 0.5rem', borderRadius:'4px' }}>BEFORE</span>
+                </div>
+                <div style={{ position:'relative' }}>
+                  <img src={item.afterImage} alt="after" style={{ width:'100%', height:'140px', objectFit:'cover', display:'block' }} />
+                  <span style={{ position:'absolute', top:'0.4rem', right:'0.4rem', background:'var(--accent)', color:'var(--bg-primary)', fontSize:'0.65rem', fontWeight:700, padding:'0.15rem 0.5rem', borderRadius:'4px' }}>AFTER</span>
+                </div>
+              </div>
+              <div style={{ padding:'0.9rem 1rem', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                 <div>
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/30 uppercase tracking-wider">
-                    {item.category || 'Residential'}
-                  </span>
-                  <h3 className="font-bold text-slate-100 text-base mt-1 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-                    {item.title}
-                  </h3>
+                  <p style={{ fontWeight:600, fontSize:'0.88rem', color:'var(--text-primary)', margin:0 }}>{item.title}</p>
+                  <p style={{ fontSize:'0.75rem', color:'var(--text-muted)', margin:'0.2rem 0 0' }}>{item.category}</p>
                 </div>
-
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => openEditModal(item)}
-                    className="p-2 text-slate-400 hover:text-amber-300 hover:bg-slate-800 rounded-lg transition"
-                    title="সম্পাদনা করুন"
-                  >
-                    <Pencil className="w-4 h-4" />
+                <div style={{ display:'flex', gap:'0.4rem' }}>
+                  <button onClick={() => openEdit(item)} style={{ padding:'0.4rem 0.7rem', borderRadius:'7px', border:'1px solid var(--border-color)', background:'none', color:'var(--text-secondary)', cursor:'pointer' }}>
+                    <Pencil size={13} />
                   </button>
-                  <button
-                    onClick={() => handleDelete(item._id)}
-                    className="p-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition"
-                    title="মুছে ফেলুন"
-                  >
-                    <Trash2 className="w-4 h-4" />
+                  <button onClick={() => handleDelete(item._id)} style={{ padding:'0.4rem 0.7rem', borderRadius:'7px', border:'1px solid #ef444440', background:'none', color:'#ef4444', cursor:'pointer' }}>
+                    <Trash2 size={13} />
                   </button>
                 </div>
               </div>
-
-              {/* Side-by-Side Image Preview */}
-              <div className="p-4 grid grid-cols-2 gap-3">
-                {/* Before Image */}
-                <div className="relative rounded-xl overflow-hidden border border-slate-800 bg-slate-950 group">
-                  <img
-                    src={item.beforeImage}
-                    alt="Before"
-                    className="w-full h-44 object-cover"
-                    onError={(e) => {
-                      e.target.onerror = null
-                      e.target.src = 'https://via.placeholder.com/400x300?text=Before+Image+Error'
-                    }}
-                  />
-                  <span className="absolute top-2 left-2 px-2.5 py-0.5 rounded-md bg-rose-600/90 text-white text-[10px] font-bold shadow-md">
-                    BEFORE
-                  </span>
-                </div>
-
-                {/* After Image */}
-                <div className="relative rounded-xl overflow-hidden border border-slate-800 bg-slate-950 group">
-                  <img
-                    src={item.afterImage}
-                    alt="After"
-                    className="w-full h-44 object-cover"
-                    onError={(e) => {
-                      e.target.onerror = null
-                      e.target.src = 'https://via.placeholder.com/400x300?text=After+Image+Error'
-                    }}
-                  />
-                  <span className="absolute top-2 left-2 px-2.5 py-0.5 rounded-md bg-emerald-600/90 text-white text-[10px] font-bold shadow-md">
-                    AFTER
-                  </span>
-                </div>
-              </div>
-
-              {item.description && (
-                <div className="px-4 pb-4">
-                  <p className="text-xs text-slate-400 bg-slate-950/50 p-2.5 rounded-xl border border-slate-800">
-                    {item.description}
-                  </p>
-                </div>
-              )}
-            </motion.div>
+            </div>
           ))}
         </div>
       )}
 
-      {/* Add / Edit Modal */}
+      {/* Modal */}
       <AnimatePresence>
-        {modalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-xl bg-slate-900 border border-amber-500/30 rounded-2xl p-6 shadow-2xl space-y-4 text-slate-100 max-h-[90vh] overflow-y-auto"
-            >
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 className="text-lg font-bold text-amber-300 flex items-center gap-2">
-                  <Image className="w-5 h-5" />
-                  {editingId ? 'ট্রান্সফরমেশন সম্পাদনা করুন' : 'নতুন Before & After ট্রান্সফরমেশন যুক্ত করুন'}
+        {modal && (
+          <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
+            onClick={() => setModal(false)}
+            style={{ position:'fixed', inset:0, backgroundColor:'rgba(0,0,0,0.5)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:'1rem' }}>
+            <motion.div initial={{ scale:0.94, opacity:0 }} animate={{ scale:1, opacity:1 }} exit={{ scale:0.94, opacity:0 }}
+              onClick={e => e.stopPropagation()}
+              style={{ background:'var(--bg-card)', borderRadius:'14px', width:'100%', maxWidth:'580px', maxHeight:'90vh', overflowY:'auto', boxShadow:'0 20px 60px rgba(0,0,0,0.3)' }}>
+
+              <div style={{ padding:'1.2rem 1.5rem', borderBottom:'1px solid var(--border-color)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                <h3 style={{ margin:0, color:'var(--text-primary)', fontSize:'1.05rem', fontWeight:700 }}>
+                  {editId ? 'Gallery Item সম্পাদনা' : 'নতুন Before & After যোগ করুন'}
                 </h3>
-                <button onClick={closeModal} className="p-1 text-slate-400 hover:text-white rounded-lg">
-                  <X className="w-5 h-5" />
-                </button>
+                <button onClick={() => setModal(false)} style={{ background:'none', border:'none', cursor:'pointer', color:'var(--text-muted)' }}><X size={20} /></button>
               </div>
 
-              {error && (
-                <div className="p-3 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-medium">
-                  {error}
+              <form onSubmit={handleSubmit} style={{ padding:'1.5rem', display:'flex', flexDirection:'column', gap:'1rem' }}>
+                {/* Image uploads */}
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1rem' }}>
+                  <ImageUploadBox label="Before ছবি" file={beforeFile} preview={beforePreview} onChange={e => handleFileChange('before', e)} required={!editId} />
+                  <ImageUploadBox label="After ছবি" file={afterFile} preview={afterPreview} onChange={e => handleFileChange('after', e)} required={!editId} />
                 </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    প্রজেক্টের শিরোনাম (Title) <span className="text-amber-400">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={form.title}
-                    onChange={(e) => setForm({ ...form, title: e.target.value })}
-                    placeholder="যেমন: আধুনিক ড্রয়িং রুম ও ডাইনিং মেকওভার"
-                    className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm focus:outline-none focus:border-amber-500"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Before ছবির লিংক (Before Image URL) <span className="text-amber-400">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={form.beforeImage}
-                      onChange={(e) => setForm({ ...form, beforeImage: e.target.value })}
-                      placeholder="যেমন: /images/before.jpeg বা ইমেজ লিংক"
-                      className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm focus:outline-none focus:border-amber-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      After ছবির লিংক (After Image URL) <span className="text-amber-400">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={form.afterImage}
-                      onChange={(e) => setForm({ ...form, afterImage: e.target.value })}
-                      placeholder="যেমন: /images/after.jpeg বা ইমেজ লিংক"
-                      className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm focus:outline-none focus:border-amber-500"
-                    />
-                  </div>
-                </div>
-
-                {/* Live Preview in Modal */}
-                {(form.beforeImage || form.afterImage) && (
-                  <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
-                    <p className="text-[11px] font-semibold text-slate-400">লাইভ প্রিভিউ (Preview):</p>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="relative rounded border border-slate-800 overflow-hidden h-24 bg-slate-900">
-                        {form.beforeImage ? (
-                          <img src={form.beforeImage} alt="Before Preview" className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="flex items-center justify-center h-full text-[10px] text-slate-500">Before Image</div>
-                        )}
-                        <span className="absolute top-1 left-1 px-1.5 py-0.5 bg-rose-600 text-[9px] text-white font-bold rounded">BEFORE</span>
-                      </div>
-                      <div className="relative rounded border border-slate-800 overflow-hidden h-24 bg-slate-900">
-                        {form.afterImage ? (
-                          <img src={form.afterImage} alt="After Preview" className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="flex items-center justify-center h-full text-[10px] text-slate-500">After Image</div>
-                        )}
-                        <span className="absolute top-1 left-1 px-1.5 py-0.5 bg-emerald-600 text-[9px] text-white font-bold rounded">AFTER</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    ক্যাটাগরি (Category)
-                  </label>
-                  <select
-                    value={form.category}
-                    onChange={(e) => setForm({ ...form, category: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm focus:outline-none focus:border-amber-500"
-                  >
-                    <option value="Residential">Residential (বাসা / অ্যাপার্টমেন্ট)</option>
-                    <option value="Commercial">Commercial (বাণিজ্যিক)</option>
-                    <option value="Office">Office (অফিস ডেকোরেশন)</option>
-                    <option value="Restaurant">Restaurant (রেস্টুরেন্ট)</option>
+                  <label style={{ display:'block', fontWeight:600, fontSize:'0.82rem', marginBottom:'0.4rem', color:'var(--text-secondary)' }}>শিরোনাম *</label>
+                  <input value={form.title} onChange={e => setForm({...form, title: e.target.value})} required
+                    placeholder="যেমন: মডার্ন লিভিং রুম ট্রান্সফর্মেশন"
+                    style={{ width:'100%', padding:'0.7rem 1rem', borderRadius:'8px', border:'1px solid var(--border-color)', background:'var(--bg-section)', color:'var(--text-primary)', fontSize:'0.88rem', boxSizing:'border-box' }} />
+                </div>
+
+                <div>
+                  <label style={{ display:'block', fontWeight:600, fontSize:'0.82rem', marginBottom:'0.4rem', color:'var(--text-secondary)' }}>ক্যাটাগরি</label>
+                  <select value={form.category} onChange={e => setForm({...form, category: e.target.value})}
+                    style={{ width:'100%', padding:'0.7rem 1rem', borderRadius:'8px', border:'1px solid var(--border-color)', background:'var(--bg-section)', color:'var(--text-primary)', fontSize:'0.88rem' }}>
+                    {CATEGORIES.map(c => <option key={c}>{c}</option>)}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    সংক্ষিপ্ত বিবরণ (বিবরণ - ঐচ্ছিক)
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={form.description}
-                    onChange={(e) => setForm({ ...form, description: e.target.value })}
-                    placeholder="প্রজেক্ট সম্পর্কে ছোট কোনো বিবরণ থাকলে লিখুন..."
-                    className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm focus:outline-none focus:border-amber-500"
-                  />
+                  <label style={{ display:'block', fontWeight:600, fontSize:'0.82rem', marginBottom:'0.4rem', color:'var(--text-secondary)' }}>বিবরণ</label>
+                  <textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows={2}
+                    placeholder="প্রজেক্ট সম্পর্কে সংক্ষিপ্ত বিবরণ..."
+                    style={{ width:'100%', padding:'0.7rem 1rem', borderRadius:'8px', border:'1px solid var(--border-color)', background:'var(--bg-section)', color:'var(--text-primary)', fontSize:'0.88rem', resize:'vertical', boxSizing:'border-box', fontFamily:'inherit' }} />
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold cursor-pointer"
-                  >
-                    বাতিল
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={saving}
-                    className="px-5 py-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-semibold text-xs rounded-xl shadow-lg disabled:opacity-50 cursor-pointer"
-                  >
-                    {saving ? 'সংরক্ষণ হচ্ছে...' : editingId ? 'হালনাগাদ করুন' : 'সংরক্ষণ করুন'}
+                {error && <p style={{ color:'#ef4444', fontSize:'0.83rem', margin:0 }}>{error}</p>}
+
+                {uploading && (
+                  <div style={{ display:'flex', alignItems:'center', gap:'0.6rem', color:'var(--text-muted)', fontSize:'0.83rem' }}>
+                    <Upload size={14} style={{ animation:'spin 1s linear infinite' }} />
+                    Cloudinary-তে আপলোড হচ্ছে...
+                  </div>
+                )}
+
+                <div style={{ display:'flex', gap:'0.75rem', justifyContent:'flex-end' }}>
+                  <button type="button" onClick={() => setModal(false)} style={{ padding:'0.65rem 1.3rem', borderRadius:'8px', border:'1px solid var(--border-color)', background:'var(--bg-section)', color:'var(--text-primary)', cursor:'pointer', fontWeight:600 }}>বাতিল</button>
+                  <button type="submit" disabled={saving} style={{ display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.65rem 1.4rem', borderRadius:'8px', border:'none', background:'var(--accent)', color:'var(--bg-primary)', cursor:'pointer', fontWeight:700, opacity: saving ? 0.7 : 1 }}>
+                    <CloudUpload size={15} /> {saving ? 'আপলোড হচ্ছে...' : 'সংরক্ষণ করুন'}
                   </button>
                 </div>
               </form>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
+      <style>{`@keyframes spin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }`}</style>
     </div>
   )
 }
-
-export default AdminGallery

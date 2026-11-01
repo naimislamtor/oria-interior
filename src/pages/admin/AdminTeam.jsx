@@ -1,319 +1,207 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Plus, Pencil, Trash2, X, RefreshCw, UserCheck, Link as LinkIcon } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Plus, Pencil, Trash2, X, RefreshCw, CloudUpload, CheckCircle2, Users } from 'lucide-react'
 import axiosInstance from '../../api/axiosInstance'
-import { useAdminAuth } from '../../context/AdminAuthContext'
 
-const emptyForm = {
-  name: '',
-  designation: '',
-  imageUrl: '',
-  order: 0,
-}
+const EMPTY = { name: '', designation: '', order: 0 }
 
-function AdminTeam() {
-  const [teamMembers, setTeamMembers] = useState([])
+export default function AdminTeam() {
+  const [members, setMembers] = useState([])
   const [loading, setLoading] = useState(true)
-  const [modalOpen, setModalOpen] = useState(false)
-  const [editingId, setEditingId] = useState(null)
-  const [form, setForm] = useState(emptyForm)
+  const [modal, setModal] = useState(false)
+  const [editId, setEditId] = useState(null)
+  const [form, setForm] = useState(EMPTY)
+  const [photoFile, setPhotoFile] = useState(null)
+  const [photoPreview, setPhotoPreview] = useState(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
-  const { token } = useAdminAuth()
+  const [toast, setToast] = useState(null)
+  const fileRef = useRef()
 
-  const fetchTeamMembers = async () => {
+  const showToast = (msg, type='success') => {
+    setToast({ msg, type })
+    setTimeout(() => setToast(null), 3000)
+  }
+
+  const fetchMembers = async () => {
     setLoading(true)
     try {
       const res = await axiosInstance.get('/api/team')
-      setTeamMembers(res.data.data || [])
-    } catch (err) {
-      console.error('Fetch team error:', err)
-    } finally {
-      setLoading(false)
-    }
+      setMembers(res.data.data || [])
+    } catch { } finally { setLoading(false) }
   }
 
-  useEffect(() => {
-    fetchTeamMembers()
-  }, [])
+  useEffect(() => { fetchMembers() }, [])
 
-  const openAddModal = () => {
-    setForm(emptyForm)
-    setEditingId(null)
-    setError('')
-    setModalOpen(true)
+  const openAdd = () => {
+    setForm(EMPTY); setEditId(null)
+    setPhotoFile(null); setPhotoPreview(null)
+    setError(''); setModal(true)
   }
 
-  const openEditModal = (member) => {
-    setForm({
-      name: member.name || '',
-      designation: member.designation || '',
-      imageUrl: member.imageUrl || '',
-      order: member.order || 0,
-    })
-    setEditingId(member._id)
-    setError('')
-    setModalOpen(true)
+  const openEdit = (m) => {
+    setForm({ name: m.name, designation: m.designation, order: m.order || 0 })
+    setEditId(m._id); setPhotoFile(null)
+    setPhotoPreview(m.imageUrl || null)
+    setError(''); setModal(true)
   }
 
-  const closeModal = () => {
-    setModalOpen(false)
-    setEditingId(null)
-    setForm(emptyForm)
-    setError('')
+  const handleFile = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    setPhotoFile(file)
+    setPhotoPreview(URL.createObjectURL(file))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!form.name.trim() || !form.designation.trim() || !form.imageUrl.trim()) {
-      setError('নাম, পদবী (Designation) এবং ছবির URL পূরণ করুন।')
-      return
-    }
+    if (!form.name || !form.designation) { setError('নাম ও পদবী আবশ্যক'); return }
+    if (!editId && !photoFile) { setError('ছবি আপলোড করুন'); return }
 
-    setSaving(true)
-    setError('')
+    setSaving(true); setError('')
     try {
-      const headers = { Authorization: `Bearer ${token}` }
+      const fd = new FormData()
+      fd.append('name', form.name)
+      fd.append('designation', form.designation)
+      fd.append('order', form.order)
+      if (photoFile) fd.append('photo', photoFile)
 
-      if (editingId) {
-        await axiosInstance.put(`/api/team/${editingId}`, form, { headers })
+      if (editId) {
+        await axiosInstance.put(`/api/team/${editId}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } })
+        showToast('টিম মেম্বার আপডেট ✅')
       } else {
-        await axiosInstance.post('/api/team', form, { headers })
+        await axiosInstance.post('/api/team', fd, { headers: { 'Content-Type': 'multipart/form-data' } })
+        showToast('নতুন মেম্বার যোগ হয়েছে ✅')
       }
-
-      await fetchTeamMembers()
-      closeModal()
+      setModal(false); fetchMembers()
     } catch (err) {
-      console.error('Save team member error:', err)
-      setError(err.response?.data?.message || 'টিম সদস্য সেভ করতে সমস্যা হয়েছে।')
-    } finally {
-      setSaving(false)
-    }
+      setError(err?.response?.data?.message || 'সংরক্ষণ ব্যর্থ')
+    } finally { setSaving(false) }
   }
 
   const handleDelete = async (id) => {
-    if (!window.confirm('আপনি কি নিশ্চিত যে এই সদস্য মুছে ফেলতে চান?')) return
+    if (!confirm('এই মেম্বার মুছে ফেলবেন?')) return
     try {
-      const headers = { Authorization: `Bearer ${token}` }
-      await axiosInstance.delete(`/api/team/${id}`, { headers })
-      await fetchTeamMembers()
-    } catch (err) {
-      console.error('Delete team member error:', err)
-      alert('সদস্য মুছতে সমস্যা হয়েছে।')
-    }
+      await axiosInstance.delete(`/api/team/${id}`)
+      setMembers(p => p.filter(m => m._id !== id))
+      showToast('মুছে ফেলা হয়েছে')
+    } catch { showToast('মুছতে ব্যর্থ', 'error') }
   }
 
   return (
     <div>
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">টিম মেম্বার ম্যানেজমেন্ট (Team Management)</h1>
-          <p className="text-gray-500 text-sm mt-1">আমাদের ডিজাইনের নেপথ্যের কারিগরগণ - সদস্য যোগ ও আপডেট করুন</p>
+      {toast && (
+        <div style={{ position:'fixed', top:'1.5rem', right:'1.5rem', zIndex:9999, padding:'0.8rem 1.4rem', borderRadius:'10px', backgroundColor: toast.type==='success' ? 'var(--accent)' : '#ef4444', color:'#fff', fontWeight:700, boxShadow:'0 4px 24px rgba(0,0,0,0.2)', display:'flex', alignItems:'center', gap:'0.5rem' }}>
+          <CheckCircle2 size={17} /> {toast.msg}
         </div>
-        <div className="flex gap-3">
-          <button
-            onClick={fetchTeamMembers}
-            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition text-sm font-medium"
-          >
-            <RefreshCw size={16} className={loading ? 'animate-spin' : ''} /> রিফ্রেশ
+      )}
+
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1.5rem', flexWrap:'wrap', gap:'1rem' }}>
+        <div>
+          <h1 style={{ fontSize:'1.6rem', fontWeight:700, color:'var(--text-primary)', margin:0 }}>টিম ম্যানেজমেন্ট</h1>
+          <p style={{ color:'var(--text-muted)', fontSize:'0.85rem', margin:'0.2rem 0 0' }}>ছবি Cloudinary-তে save হবে • মোট {members.length} জন</p>
+        </div>
+        <div style={{ display:'flex', gap:'0.7rem' }}>
+          <button onClick={fetchMembers} style={{ display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.6rem 1rem', borderRadius:'8px', border:'1px solid var(--border-color)', background:'var(--bg-card)', color:'var(--text-secondary)', cursor:'pointer', fontSize:'0.85rem' }}>
+            <RefreshCw size={14} /> Refresh
           </button>
-          <button
-            onClick={openAddModal}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium text-white transition shadow-sm"
-            style={{ backgroundColor: '#c9a84c' }}
-          >
-            <Plus size={18} /> নতুন সদস্য যোগ করুন
+          <button onClick={openAdd} style={{ display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.6rem 1.1rem', borderRadius:'8px', border:'none', background:'var(--accent)', color:'var(--bg-primary)', cursor:'pointer', fontWeight:700, fontSize:'0.85rem' }}>
+            <Plus size={15} /> নতুন মেম্বার
           </button>
         </div>
       </div>
 
-      {/* Content */}
       {loading ? (
-        <div className="text-center py-20 bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="animate-spin w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full mx-auto mb-3" />
-          <p className="text-gray-500 text-sm">টিম মেম্বার লোড হচ্ছে...</p>
-        </div>
-      ) : teamMembers.length === 0 ? (
-        <div className="text-center py-20 bg-white rounded-xl shadow-sm border border-gray-200">
-          <UserCheck size={48} className="mx-auto text-gray-300 mb-4" />
-          <h3 className="text-lg font-bold text-gray-800">কোন টিম সদস্য পাওয়া যায়নি</h3>
-          <p className="text-gray-500 text-sm mt-1 max-w-sm mx-auto">
-            এখানে যুক্ত করা সদস্যরা About Us পেজে "আমাদের ডিজাইনের নেপথ্যের কারিগরগণ" গ্রিডে প্রদর্শিত হবে।
-          </p>
-          <button
-            onClick={openAddModal}
-            className="mt-5 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white"
-            style={{ backgroundColor: '#c9a84c' }}
-          >
-            <Plus size={16} /> সদস্য যোগ করুন
-          </button>
+        <div style={{ textAlign:'center', padding:'4rem', color:'var(--text-muted)' }}>লোড হচ্ছে...</div>
+      ) : members.length === 0 ? (
+        <div style={{ textAlign:'center', padding:'4rem', color:'var(--text-muted)' }}>
+          <Users size={40} style={{ margin:'0 auto 1rem', opacity:0.3 }} />
+          <p>কোনো টিম মেম্বার নেই</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {teamMembers.map((member) => (
-            <motion.div
-              key={member._id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between"
-            >
-              <div>
-                <div className="h-56 bg-gray-100 relative overflow-hidden">
-                  <img
-                    src={member.imageUrl}
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.target.onerror = null
-                      e.target.src = 'https://via.placeholder.com/400x400?text=No+Image'
-                    }}
-                  />
-                </div>
-                <div className="p-5">
-                  <h3 className="text-lg font-bold text-gray-900">{member.name}</h3>
-                  <p className="text-amber-600 font-medium text-sm mt-0.5">{member.designation}</p>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(200px, 1fr))', gap:'1.2rem' }}>
+          {members.map(m => (
+            <div key={m._id} style={{ background:'var(--bg-card)', border:'1px solid var(--border-color)', borderRadius:'12px', overflow:'hidden', textAlign:'center' }}>
+              <div style={{ position:'relative', height:'180px', overflow:'hidden' }}>
+                <img src={m.imageUrl} alt={m.name} style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
+                <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.4)', opacity:0, transition:'0.2s', display:'flex', alignItems:'center', justifyContent:'center', gap:'0.5rem' }}
+                  onMouseEnter={e => e.currentTarget.style.opacity=1} onMouseLeave={e => e.currentTarget.style.opacity=0}>
+                  <button onClick={() => openEdit(m)} style={{ padding:'0.5rem 0.8rem', borderRadius:'7px', border:'none', background:'#fff', color:'#333', cursor:'pointer' }}><Pencil size={13} /></button>
+                  <button onClick={() => handleDelete(m._id)} style={{ padding:'0.5rem 0.8rem', borderRadius:'7px', border:'none', background:'#ef4444', color:'#fff', cursor:'pointer' }}><Trash2 size={13} /></button>
                 </div>
               </div>
-
-              <div className="px-5 py-3 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
-                <span className="text-xs text-gray-400">সিরিয়াল: {member.order || 0}</span>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => openEditModal(member)}
-                    className="p-1.5 text-gray-600 hover:text-amber-600 hover:bg-amber-50 rounded transition"
-                    title="সম্পাদনা করুন"
-                  >
-                    <Pencil size={18} />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(member._id)}
-                    className="p-1.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition"
-                    title="মুছে ফেলুন"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
+              <div style={{ padding:'0.8rem' }}>
+                <p style={{ fontWeight:700, fontSize:'0.9rem', color:'var(--text-primary)', margin:0 }}>{m.name}</p>
+                <p style={{ fontSize:'0.78rem', color:'var(--text-muted)', margin:'0.2rem 0 0' }}>{m.designation}</p>
+                {m.order > 0 && <p style={{ fontSize:'0.7rem', color:'var(--accent)', margin:'0.2rem 0 0' }}>ক্রম: {m.order}</p>}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       )}
 
-      {/* Add / Edit Modal */}
-      {modalOpen && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl"
-          >
-            <div className="flex justify-between items-center pb-4 border-b border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900">
-                {editingId ? 'টিম সদস্য সম্পাদনা করুন' : 'নতুন টিম সদস্য যোগ করুন'}
-              </h2>
-              <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 p-1">
-                <X size={20} />
-              </button>
-            </div>
+      <AnimatePresence>
+        {modal && (
+          <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
+            onClick={() => setModal(false)}
+            style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:'1rem' }}>
+            <motion.div initial={{ scale:0.94 }} animate={{ scale:1 }} exit={{ scale:0.94 }}
+              onClick={e => e.stopPropagation()}
+              style={{ background:'var(--bg-card)', borderRadius:'14px', width:'100%', maxWidth:'440px', boxShadow:'0 20px 60px rgba(0,0,0,0.3)' }}>
 
-            {error && (
-              <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
-                {error}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">সদস্যের নাম (Name) *</label>
-                <input
-                  type="text"
-                  required
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="যেমন: মোঃ সাব্বির আহমেদ"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"
-                />
+              <div style={{ padding:'1.2rem 1.5rem', borderBottom:'1px solid var(--border-color)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                <h3 style={{ margin:0, color:'var(--text-primary)', fontWeight:700 }}>{editId ? 'মেম্বার সম্পাদনা' : 'নতুন টিম মেম্বার'}</h3>
+                <button onClick={() => setModal(false)} style={{ background:'none', border:'none', cursor:'pointer', color:'var(--text-muted)' }}><X size={20} /></button>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">পদবী (Designation) *</label>
-                <input
-                  type="text"
-                  required
-                  value={form.designation}
-                  onChange={(e) => setForm({ ...form, designation: e.target.value })}
-                  placeholder="যেমন: লিড আর্কিটেক্ট / ৩ডি ডিজাইনার"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">ছবির URL (Image URL) *</label>
-                <div className="relative">
-                  <input
-                    type="url"
-                    required
-                    value={form.imageUrl}
-                    onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-                    placeholder="https://example.com/image.jpg"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"
-                  />
-                  <LinkIcon size={16} className="absolute left-3 top-3 text-gray-400" />
-                </div>
-              </div>
-
-              {form.imageUrl && (
+              <form onSubmit={handleSubmit} style={{ padding:'1.5rem', display:'flex', flexDirection:'column', gap:'1rem' }}>
+                {/* Photo upload */}
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">ছবি প্রিভিউ (Preview):</label>
-                  <div className="h-40 w-full bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                    <img
-                      src={form.imageUrl}
-                      alt="Preview"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.onerror = null
-                        e.target.src = 'https://via.placeholder.com/400x300?text=Invalid+Image+URL'
-                      }}
-                    />
+                  <label style={{ display:'block', fontWeight:600, fontSize:'0.82rem', marginBottom:'0.5rem', color:'var(--text-secondary)' }}>ছবি {!editId && '*'}</label>
+                  <div onClick={() => fileRef.current.click()} style={{ border:'2px dashed', borderColor: photoPreview ? 'var(--accent)' : 'var(--border-color)', borderRadius:'10px', height:'160px', cursor:'pointer', overflow:'hidden', display:'flex', alignItems:'center', justifyContent:'center', background:'var(--bg-section)', position:'relative' }}>
+                    {photoPreview ? (
+                      <img src={photoPreview} alt="preview" style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+                    ) : (
+                      <div style={{ textAlign:'center', color:'var(--text-muted)' }}>
+                        <CloudUpload size={28} style={{ margin:'0 auto 0.5rem' }} />
+                        <p style={{ fontSize:'0.78rem' }}>ক্লিক করে ছবি আপলোড করুন</p>
+                      </div>
+                    )}
                   </div>
+                  <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
                 </div>
-              )}
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">প্রদর্শন ক্রম (Order Number)</label>
-                <input
-                  type="number"
-                  value={form.order}
-                  onChange={(e) => setForm({ ...form, order: e.target.value })}
-                  placeholder="0"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"
-                />
-              </div>
+                <div>
+                  <label style={{ display:'block', fontWeight:600, fontSize:'0.82rem', marginBottom:'0.4rem', color:'var(--text-secondary)' }}>নাম *</label>
+                  <input value={form.name} onChange={e => setForm({...form, name: e.target.value})} required placeholder="যেমন: Naim Islam"
+                    style={{ width:'100%', padding:'0.7rem 1rem', borderRadius:'8px', border:'1px solid var(--border-color)', background:'var(--bg-section)', color:'var(--text-primary)', fontSize:'0.88rem', boxSizing:'border-box' }} />
+                </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="px-5 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
-                >
-                  বাতিল
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="px-6 py-2.5 rounded-lg text-sm font-medium text-white transition disabled:opacity-50"
-                  style={{ backgroundColor: '#c9a84c' }}
-                >
-                  {saving ? 'সেভ হচ্ছে...' : editingId ? 'আপডেট করুন' : 'সদস্য যোগ করুন'}
-                </button>
-              </div>
-            </form>
+                <div>
+                  <label style={{ display:'block', fontWeight:600, fontSize:'0.82rem', marginBottom:'0.4rem', color:'var(--text-secondary)' }}>পদবী *</label>
+                  <input value={form.designation} onChange={e => setForm({...form, designation: e.target.value})} required placeholder="যেমন: Lead Designer"
+                    style={{ width:'100%', padding:'0.7rem 1rem', borderRadius:'8px', border:'1px solid var(--border-color)', background:'var(--bg-section)', color:'var(--text-primary)', fontSize:'0.88rem', boxSizing:'border-box' }} />
+                </div>
+
+                <div>
+                  <label style={{ display:'block', fontWeight:600, fontSize:'0.82rem', marginBottom:'0.4rem', color:'var(--text-secondary)' }}>ক্রম (Order)</label>
+                  <input type="number" value={form.order} onChange={e => setForm({...form, order: e.target.value})} min="0"
+                    style={{ width:'100%', padding:'0.7rem 1rem', borderRadius:'8px', border:'1px solid var(--border-color)', background:'var(--bg-section)', color:'var(--text-primary)', fontSize:'0.88rem', boxSizing:'border-box' }} />
+                </div>
+
+                {error && <p style={{ color:'#ef4444', fontSize:'0.83rem', margin:0 }}>{error}</p>}
+
+                <div style={{ display:'flex', gap:'0.75rem', justifyContent:'flex-end' }}>
+                  <button type="button" onClick={() => setModal(false)} style={{ padding:'0.65rem 1.3rem', borderRadius:'8px', border:'1px solid var(--border-color)', background:'var(--bg-section)', color:'var(--text-primary)', cursor:'pointer', fontWeight:600 }}>বাতিল</button>
+                  <button type="submit" disabled={saving} style={{ display:'flex', alignItems:'center', gap:'0.4rem', padding:'0.65rem 1.4rem', borderRadius:'8px', border:'none', background:'var(--accent)', color:'var(--bg-primary)', cursor:'pointer', fontWeight:700, opacity: saving ? 0.7 : 1 }}>
+                    <CloudUpload size={15} /> {saving ? 'সংরক্ষণ হচ্ছে...' : 'সংরক্ষণ করুন'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
           </motion.div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   )
 }
-
-export default AdminTeam

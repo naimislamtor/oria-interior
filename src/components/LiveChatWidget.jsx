@@ -83,58 +83,38 @@ export default function LiveChatWidget() {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/chat/send`, {
+      const response = await fetch(`${API_BASE_URL}/faq/match`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId,
-          message: query.trim(),
-        }),
+        body: JSON.stringify({ message: query.trim() }),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.data?.reply) {
-          const teamMsg = {
-            id: 'team-' + Date.now(),
-            role: 'assistant',
-            text: data.data.reply,
-            createdAt: new Date().toISOString(),
-          };
-          setMessages((prev) => [...prev, teamMsg]);
-        }
+      const data = await response.json();
+      let replyText;
+      if (data.success && data.matched && data.answer) {
+        replyText = data.answer;
       } else {
-        throw new Error('API server unavailable');
+        replyText =
+          'দুঃখিত, আপনার প্রশ্নটি ঠিকভাবে বুঝতে পারিনি। সরাসরি আমাদের টিমের সাথে কথা বলুন:\nWhatsApp: https://wa.me/8801334003388\nফোন: 01334003388';
       }
+
+      setMessages((prev) => [
+        ...prev,
+        { id: 'bot-' + Date.now(), role: 'assistant', text: replyText, createdAt: new Date().toISOString() },
+      ]);
     } catch (err) {
-      console.warn('Backend API connection warning, using client fallback:', err);
-      const fallbackReply = getFallbackReply(query);
       setMessages((prev) => [
         ...prev,
         {
-          id: 'team-fallback-' + Date.now(),
+          id: 'err-' + Date.now(),
           role: 'assistant',
-          text: fallbackReply,
+          text: 'সংযোগে সমস্যা হচ্ছে। সরাসরি WhatsApp-এ যোগাযোগ করুন:\nhttps://wa.me/8801334003388',
           createdAt: new Date().toISOString(),
         },
       ]);
     } finally {
       setLoading(false);
     }
-  };
-
-  const getFallbackReply = (text) => {
-    const msg = text.toLowerCase();
-    if (msg.includes('সেবা') || msg.includes('সার্ভিস')) {
-      return 'ওরিয়া ইন্টেরিয়র প্রধানত ৪টি ক্যাটাগরিতে প্রফেশনাল সার্ভিস প্রদান করে:\n১. রেসিডেন্সিয়াল ইন্টেরিয়র (ফ্ল্যাট/অ্যাপার্টমেন্ট)\n২. কমার্শিয়াল ও অফিস ডেকোরেশন\n৩. আর্কিটেকচারাল ৩ডি প্ল্যানিং\n৪. কাস্টম ফার্নিচার ও কাঠের মেকওভার।';
-    }
-    if (msg.includes('কনসালটেশন') || msg.includes('ভিজিট')) {
-      return 'আমরা সম্পূর্ণ বিনামূল্যে প্রাথমিক কনসালটেশন এবং সাইট মেজারমেন্ট সার্ভিস প্রদান করি। বুক করতে আপনার ফোন নম্বরটি লিখুন।';
-    }
-    if (msg.includes('বাজেট') || msg.includes('খরচ')) {
-      return 'ইন্টেরিয়র ডিজাইন স্কয়ার ফিট এবং উপাদান (Materials)-এর ওপর নির্ভর করে। আপনার স্পেসের আনুমানিক স্কয়ার ফিট ও ফোন নম্বর দিলে আমরা একটি ফ্রি এস্টিমেট বানিয়ে দেব।';
-    }
-    return 'ধন্যবাদ আপনার মেসেজের জন্য! আমাদের টিম অতি শীঘ্রই আপনার সাথে সরাসরি যোগাযোগ করবে। সরাসরি হোয়াটসঅ্যাপে কথা বলতে লিখুন https://wa.me/8801334003388।';
   };
 
   const renderFormattedMessage = (text) => {
