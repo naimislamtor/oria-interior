@@ -11,7 +11,7 @@ const navItems = [
   { name: 'FAQ Chatbot', path: '/admin/faq', icon: MessageSquare },
   { name: 'Before & After Gallery', path: '/admin/gallery', icon: Layers },
   { name: 'Inquiries', path: '/admin/inquiries', icon: Inbox },
-  { name: 'Portfolio', path: '/admin/portfolio', icon: Image },
+  { name: 'Projects', path: '/admin/portfolio', icon: Image },
   { name: 'Blog', path: '/admin/blog', icon: FileText },
   { name: 'Team', path: '/admin/team', icon: Users },
 ]

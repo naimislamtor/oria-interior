@@ -4,7 +4,7 @@ export const translations = {
       home: 'হোম',
       about: 'আমাদের সম্পর্কে',
       services: 'সেবাসমূহ',
-      portfolio: 'পোর্টফোলিও',
+      portfolio: 'Projects',
       gallery: 'গ্যালারি',
       blog: 'ব্লগ',
       faq: 'সাধারণ প্রশ্ন',
@@ -28,7 +28,7 @@ export const translations = {
       ],
       subtitle: 'আবাসিক বাড়ি থেকে শুরু করে কমার্শিয়াল স্পেস — আমরা তৈরি করি অনুপ্রাণিত এবং উন্নত জীবনযাত্রার ইন্টেরিয়র।',
       getQuoteBtn: 'ফ্রি কোটেশন পান',
-      viewPortfolioBtn: 'পোর্টফোলিও দেখুন',
+      viewPortfolioBtn: 'Projects দেখুন',
     },
     stats: {
       completedProjects: 'সম্পন্ন প্রজেক্ট',
@@ -84,9 +84,9 @@ export const translations = {
       viewMore: 'আরও ছবি দেখুন',
     },
     portfolio: {
-      tag: 'আমাদের কাজ',
+      tag: 'Our Projects',
       title: 'সেরা প্রজেক্টসমূহ',
-      viewAll: 'সব প্রজেক্ট দেখুন',
+      viewAll: 'সব Projects দেখুন',
     },
     testimonials: {
       tag: 'গ্রাহকদের অভিজ্ঞতা',
@@ -219,7 +219,7 @@ export const translations = {
       home: 'Home',
       about: 'About',
       services: 'Services',
-      portfolio: 'Portfolio',
+      portfolio: 'Projects',
       gallery: 'Gallery',
       blog: 'Blog',
       faq: 'FAQ',
@@ -243,7 +243,7 @@ export const translations = {
       ],
       subtitle: 'From residential homes to commercial spaces — we create interiors that inspire and elevate everyday living.',
       getQuoteBtn: 'Get Free Quote',
-      viewPortfolioBtn: 'View Portfolio',
+      viewPortfolioBtn: 'View Projects',
     },
     stats: {
       completedProjects: 'Projects Completed',
@@ -299,7 +299,7 @@ export const translations = {
       viewMore: 'View More',
     },
     portfolio: {
-      tag: 'Our Work',
+      tag: 'Our Projects',
       title: 'Featured Projects',
       viewAll: 'View All Projects',
     },
